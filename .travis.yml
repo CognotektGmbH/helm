@@ -3,8 +3,6 @@ sudo: false
 language: python
 python: "2.7"
 
-# urllib3[secure] fixes the annoying "Insecureplatformwarning"
-install: pip install awscli urllib3[secure]
 
 env:
   HELM=2.9.1
@@ -20,7 +18,7 @@ script:
   - mkdir helm
   - cd helm
   - curl -L "${URL}-v${HELM}-${OS}-${ARCH}.tar.gz" | gunzip | tar xvf -
-  - mv "${OS}-${arch}/helm" .
+  - mv "${OS}-${ARCH}/helm" .
   - cd ..
   # lint everything
   - helm/helm lint charts/*
@@ -32,6 +30,10 @@ script:
   # create / fill repo
   - helm/helm package charts/* --destination ./public
   - helm/helm repo index --url http://${BUCKET}/${BUCKET_KEY} ./public/
+  # NOW install all the pip stuff, cause if we break during the linting step
+  # we saved some time. theurllib3[secure] fixes the annoying
+  # "Insecureplatformwarning"
+  - pip install awscli urllib3[secure]
   # upload to s3
   - '[ "$TRAVIS_BRANCH" = "master" ] && aws s3 sync --delete public/ s3://www.cognotekt.com/ || true'
 
