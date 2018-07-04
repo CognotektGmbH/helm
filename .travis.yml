@@ -1,0 +1,40 @@
+dist: trusty
+sudo: false
+language: python
+python: "2.7"
+
+# urllib3[secure] fixes the annoying "Insecureplatformwarning"
+install: pip install awscli urllib3[secure]
+
+env:
+  HELM=2.9.1
+  OS=linux
+  ARCH=amd64
+  URL=https://storage.googleapis.com/kubernetes-helm/helm
+  BUCKET=helm.cognotekt.com
+  BUCKET_KEY=ops/
+
+# highly inspired from this: https://is.gd/vc0Zhz
+script:
+  # download and unpack helm
+  - mkdir helm
+  - cd helm
+  - curl -L "${URL}-v${HELM}-${OS}-${ARCH}.tar.gz" | gunzip | tar xvf -
+  - mv "${OS}-${arch}/helm" .
+  - cd ..
+  # lint everything
+  - helm/helm lint charts/*
+  - helm/helm lint charts/*/charts/*
+  - helm/helm init --client-only
+  # prepare target directories
+  - mkdir -p ./public
+  - "echo -e 'User-Agent: *\nDisallow: /' > ./public/robots.txt"
+  # create / fill repo
+  - helm/helm package charts/* --destination ./public
+  - helm/helm repo index --url http://${BUCKET}/${BUCKET_KEY} ./public/
+  # upload to s3
+  - '[ "$TRAVIS_BRANCH" = "master" ] && aws s3 sync --delete public/ s3://www.cognotekt.com/ || true'
+
+notifications:
+    email:
+        on_failure: always
