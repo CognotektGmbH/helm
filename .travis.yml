@@ -14,6 +14,8 @@ env:
 
 # highly inspired from this: https://is.gd/vc0Zhz
 script:
+  # fail on first failure ... travis does not do this by default it seems.
+  - set -e
   # download and unpack helm
   - mkdir helm
   - cd helm
@@ -22,7 +24,6 @@ script:
   - cd ..
   # lint everything
   - helm/helm lint charts/*
-  - helm/helm lint charts/*/charts/*
   - helm/helm init --client-only
   # prepare target directories
   - mkdir -p ./public
@@ -35,7 +36,11 @@ script:
   # "Insecureplatformwarning"
   - pip install awscli urllib3[secure]
   # upload to s3
-  - '[ "$TRAVIS_BRANCH" = "master" ] && aws s3 sync --delete public/ s3://www.cognotekt.com/ || true'
+  # first - sanity check. don't look under $BUCKET_KEY, cause the FIRST time
+  # will not be there :)
+  - aws s3 ls s3://${BUCKET}/
+  # second - upload
+  - '[ "$TRAVIS_BRANCH" = "master" ] && aws s3 sync --delete public/ s3://${BUCKET}/${BUCKET_KEY} || true'
 
 notifications:
     email:
