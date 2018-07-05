@@ -1,0 +1,70 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "fluentd.fullname" . }}
+  labels:
+    app: {{ template "fluentd.name" . }}
+    chart: {{ template "fluentd.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "fluentd.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fluentd.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          args: [1000d]
+          command: [/bin/sleep]
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: LOGZIO_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fluentd.fullname" . }}-logzio-token
+                  key: token
+          volumeMounts:
+            - name: config-default
+              # the default config file name is "fluent.conf"
+              mountPath: /etc/fluent/fluent.conf
+              subPath: fluent.conf
+{{- if .Values.targets.logzio.enable }}
+            - name: config-logzio
+              mountPath: /etc/fluent/config.d/logzio.conf
+              subPath: logzio.conf
+{{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      volumes:
+      - name: config-default
+        configMap:
+          name: {{ template "fluentd.fullname" . }}-config-default
+{{- if .Values.targets.logzio.enable }}
+      - name: config-logzio
+        configMap:
+          name: {{ template "fluentd.fullname" . }}-config-logzio
+{{- end -}}
