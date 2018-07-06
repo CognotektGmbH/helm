@@ -10,10 +10,12 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+{{- if .Values.sources.insecureForward.enable }}
+    - name: insecureforward
+      port: {{ .Values.sources.insecureForward.port }}
+      targetPort: insecureforward
       protocol: TCP
-      name: http
+{{- end }}
   selector:
     app: {{ template "fluentd.name" . }}
     release: {{ .Release.Name }}

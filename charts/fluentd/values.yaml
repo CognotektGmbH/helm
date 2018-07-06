@@ -11,23 +11,30 @@ image:
 
 service:
   type: ClusterIP
-  port: 80
-  listener: listener.logz.io:8071
-  log_type: my_type
 
 config:
   default: |
     # just include config.d/*.conf ... so we're flexible :)
     # relying on alphabetical imports is discouraged (https://is.gd/RNhiU3),
     # but we don't care for now and keep it this way.
-    @include config.d/*.conf
+    @include chart.conf
+
+sources:
+  # let's enable this by default to make it really really simple to get up
+  # and running
+  insecureForward:
+    enable: true
+    port: 24224
+    bind: 0.0.0.0
 
 targets:
   logzio:
     enable: false
     token: changeme
     listener: listener.logz.io:8071
-    log_type: my_type
+    log_type: cluster-logs
+  stdout:
+    enable: false
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

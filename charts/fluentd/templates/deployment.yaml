@@ -21,30 +21,31 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          args: [1000d]
-          command: [/bin/sleep]
+#          args: [1000d]
+#          command: [/bin/sleep]
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 80
+{{- if .Values.sources.insecureForward.enable }}
+            - name: insecureforward
+              containerPort: {{ .Values.sources.insecureForward.port }}
               protocol: TCP
+{{- end }}
           env:
+{{- if .Values.targets.logzio.enable }}
             - name: LOGZIO_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "fluentd.fullname" . }}-logzio-token
-                  key: token
+                  name: {{ template "fluentd.fullname" . }}
+                  key: logzio-token
+ {{- end }}
           volumeMounts:
             - name: config-default
-              # the default config file name is "fluent.conf"
               mountPath: /etc/fluent/fluent.conf
               subPath: fluent.conf
-{{- if .Values.targets.logzio.enable }}
-            - name: config-logzio
-              mountPath: /etc/fluent/config.d/logzio.conf
-              subPath: logzio.conf
-{{- end }}
+            - name: config-chart
+              mountPath: /etc/fluent/chart.conf
+              subPath: chart.conf
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}
@@ -62,9 +63,7 @@ spec:
       volumes:
       - name: config-default
         configMap:
-          name: {{ template "fluentd.fullname" . }}-config-default
-{{- if .Values.targets.logzio.enable }}
-      - name: config-logzio
+          name: {{ template "fluentd.fullname" . }}-config
+      - name: config-chart
         configMap:
-          name: {{ template "fluentd.fullname" . }}-config-logzio
-{{- end -}}
+          name: {{ template "fluentd.fullname" . }}-config
