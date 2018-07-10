@@ -1,0 +1,55 @@
+# Default values for fluentd.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+
+image:
+  repository: quay.io/c11h/fluentd
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+
+config:
+  default: |
+    # just include config.d/*.conf ... so we're flexible :)
+    # relying on alphabetical imports is discouraged (https://is.gd/RNhiU3),
+    # but we don't care for now and keep it this way.
+    @include chart.conf
+
+sources:
+  # let's enable this by default to make it really really simple to get up
+  # and running
+  insecureForward:
+    enable: true
+    port: 24224
+    bind: 0.0.0.0
+
+targets:
+  logzio:
+    enable: false
+    token: changeme
+    listener: listener.logz.io:8071
+    log_type: cluster-logs
+  stdout:
+    enable: false
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -1,0 +1,69 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "fluentd.fullname" . }}
+  labels:
+    app: {{ template "fluentd.name" . }}
+    chart: {{ template "fluentd.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "fluentd.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fluentd.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+#          args: [1000d]
+#          command: [/bin/sleep]
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+{{- if .Values.sources.insecureForward.enable }}
+            - name: insecureforward
+              containerPort: {{ .Values.sources.insecureForward.port }}
+              protocol: TCP
+{{- end }}
+          env:
+{{- if .Values.targets.logzio.enable }}
+            - name: LOGZIO_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fluentd.fullname" . }}
+                  key: logzio-token
+ {{- end }}
+          volumeMounts:
+            - name: config-default
+              mountPath: /etc/fluent/fluent.conf
+              subPath: fluent.conf
+            - name: config-chart
+              mountPath: /etc/fluent/chart.conf
+              subPath: chart.conf
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      volumes:
+      - name: config-default
+        configMap:
+          name: {{ template "fluentd.fullname" . }}-config
+      - name: config-chart
+        configMap:
+          name: {{ template "fluentd.fullname" . }}-config

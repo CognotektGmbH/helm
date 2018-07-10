@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fluentd.fullname" . }}
+  labels:
+    app: {{ template "fluentd.name" . }}
+    chart: {{ template "fluentd.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+{{- if .Values.sources.insecureForward.enable }}
+    - name: insecureforward
+      port: {{ .Values.sources.insecureForward.port }}
+      targetPort: insecureforward
+      protocol: TCP
+{{- end }}
+  selector:
+    app: {{ template "fluentd.name" . }}
+    release: {{ .Release.Name }}
