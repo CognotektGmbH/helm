@@ -24,6 +24,10 @@ source:
     enable: true
     port: 24224
     bind: 0.0.0.0
+  customConfig:
+
+filter:
+  customConfig:
 
 target:
   logzio:
@@ -33,6 +37,7 @@ target:
     log_type: cluster-logs
   stdout:
     enable: false
+  customConfig:
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

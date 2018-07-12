@@ -10,12 +10,7 @@ data:
 
 
   chart.conf: |
-    # ################################################## #
-    #
-    #       here come the SOURCE configurations :)       #
-    #
-    # ################################################## #
-
+    # start of config file
 {{- if .Values.source.insecureForward.enable }}
 
     # FORWARD (insecure) source
@@ -26,17 +21,19 @@ data:
       port {{ .Values.source.insecureForward.port }}
     </source>
 {{- end }}
+{{- if .Values.source.customConfig }}
 
+    # CUSTOM source config
+{{ .Values.source.customConfig | indent 4 }}
+{{- end }}
+{{- if .Values.filter.customConfig }}
 
-    # ################################################## #
-    #
-    #       here come the TARGET configurations :)       #
-    #
-    # ################################################## #
-
+    # CUSTOM filter config
+{{ .Values.filter.customConfig | indent 4 }}
+{{- end }}
 {{- if .Values.target.stdout.enable }}
 
-    # STDOUT
+    # STDOUT target config
     # inspired from here: https://is.gd/BPn3w8
     <filter kubernetes.**>
       @type kubernetes_metadata
@@ -52,7 +49,7 @@ data:
 {{- end }}
 {{- if .Values.target.logzio.enable }}
 
-    # LOGZIO
+    # LOGZIO target config
     # config template taken from logzio "log shipping" page:
     # https://app.logz.io/#/dashboard/data-sources/Fluentd
     <match **>
@@ -69,4 +66,9 @@ data:
           queue_limit_length 4096
       </buffer>
     </match>
+{{- end }}
+{{- if .Values.target.customConfig }}
+
+    # CUSTOM target config
+{{ .Values.target.customConfig | indent 4 }}
 {{- end }}

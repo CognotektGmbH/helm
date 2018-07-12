@@ -16,24 +16,27 @@ Install using `helm install repo/fluentd`.
 
 | Parameter | Description | Default |
 |---------- | ----------- | ------- |
-| `replicaCount`                     | How many fluentd containers to launch                 | `2`                              |
-| `image.repository`                 |                                                       | `quay.io/c11h/fluentd`           |
-| `image.tag`                        |                                                       | `latest`                         |
-| `image.pullPolicy`                 |                                                       | `Always`                         |
-| `service.type`                     |                                                       | `ClusterIP`                      |
-| `config.default`                   |                                                       | See below                        |
-| `source.insecureForward.enable`    | Enable the `forward` input in an insecure version     | `true`                           |
-| `source.insecureForward.port`      | Which port to listen on for insecure forward source   | `24224`                          |
-| `source.insecureForward.bind`      | Which addresses to bind to                            | `0.0.0.0`                        |
-| `target.logzio.enable`             | Enable logzio target                                  | `false`                          |
-| `target.logzio.token`              | The logzio token, required for the target             | `changeme`                       |
-| `target.logzio.listener`           | The logzio listener                                   | `listener.logz.io:8071`          |
-| `target.logzio.log_type`           | The log type to set in logzio                         | `cluster-logs`                   |
-| `target.stdout.enable`             | Enable stdout target                                  | `false`                          |
-| `resources`                        |                                                       | `{}`                             |
-| `nodeSelector`                     |                                                       | `{}`                             |
-| `tolerations`                      |                                                       | `[]`                             |
-| `affinity`                         |                                                       | `{}`                             |
+| `replicaCount`                     | How many fluentd containers to launch                            | `2`                              |
+| `image.repository`                 |                                                                  | `quay.io/c11h/fluentd`           |
+| `image.tag`                        |                                                                  | `latest`                         |
+| `image.pullPolicy`                 |                                                                  | `Always`                         |
+| `service.type`                     |                                                                  | `ClusterIP`                      |
+| `config.default`                   |                                                                  | See below                        |
+| `source.insecureForward.enable`    | Enable the `forward` input in an insecure version                | `true`                           |
+| `source.insecureForward.port`      | Which port to listen on for insecure forward source              | `24224`                          |
+| `source.insecureForward.bind`      | Which addresses to bind to                                       | `0.0.0.0`                        |
+| `source.customConfig`              | Add your own source config after the generated source configs    | no default value                 |
+| `filter.customConfig`              | Add your own filter config after the generated filter configs    | no default value                 |
+| `target.logzio.enable`             | Enable logzio target                                             | `false`                          |
+| `target.logzio.token`              | The logzio token, required for the target                        | `changeme`                       |
+| `target.logzio.listener`           | The logzio listener                                              | `listener.logz.io:8071`          |
+| `target.logzio.log_type`           | The log type to set in logzio                                    | `cluster-logs`                   |
+| `target.stdout.enable`             | Enable stdout target                                             | `false`                          |
+| `target.customConfig`              | Add your own custom target config at the end of the file         | no default value                 |
+| `resources`                        |                                                                  | `{}`                             |
+| `nodeSelector`                     |                                                                  | `{}`                             |
+| `tolerations`                      |                                                                  | `[]`                             |
+| `affinity`                         |                                                                  | `{}`                             |
 
 
 ### Fluentd default config
