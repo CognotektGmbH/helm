@@ -16,14 +16,14 @@ data:
     #
     # ################################################## #
 
-{{- if .Values.sources.insecureForward.enable }}
+{{- if .Values.source.insecureForward.enable }}
 
     # FORWARD (insecure) source
     # taken from here: https://app.logz.io/#/dashboard/data-sources/Fluentd
     <source>
       type forward
-      bind {{ .Values.sources.insecureForward.bind }}
-      port {{ .Values.sources.insecureForward.port }}
+      bind {{ .Values.source.insecureForward.bind }}
+      port {{ .Values.source.insecureForward.port }}
     </source>
 {{- end }}
 
@@ -34,7 +34,7 @@ data:
     #
     # ################################################## #
 
-{{- if .Values.targets.stdout.enable }}
+{{- if .Values.target.stdout.enable }}
 
     # STDOUT
     # inspired from here: https://is.gd/BPn3w8
@@ -50,14 +50,14 @@ data:
       @type stdout
     </match>
 {{- end }}
-{{- if .Values.targets.logzio.enable }}
+{{- if .Values.target.logzio.enable }}
 
     # LOGZIO
     # config template taken from logzio "log shipping" page:
     # https://app.logz.io/#/dashboard/data-sources/Fluentd
     <match **>
       @type logzio_buffered
-      endpoint_url "https://{{ .Values.targets.logzio.listener }}?token=#{ENV['LOGZIO_TOKEN']}&type={{ .Values.targets.logzio.log_type }}"
+      endpoint_url "https://{{ .Values.target.logzio.listener }}?token=#{ENV['LOGZIO_TOKEN']}&type={{ .Values.target.logzio.log_type }}"
       output_include_time true
       output_include_tags true
       http_idle_timeout 10

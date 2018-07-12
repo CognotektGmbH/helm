@@ -15,11 +15,9 @@ service:
 config:
   default: |
     # just include config.d/*.conf ... so we're flexible :)
-    # relying on alphabetical imports is discouraged (https://is.gd/RNhiU3),
-    # but we don't care for now and keep it this way.
     @include chart.conf
 
-sources:
+source:
   # let's enable this by default to make it really really simple to get up
   # and running
   insecureForward:
@@ -27,7 +25,7 @@ sources:
     port: 24224
     bind: 0.0.0.0
 
-targets:
+target:
   logzio:
     enable: false
     token: changeme
