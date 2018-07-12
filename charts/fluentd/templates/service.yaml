@@ -10,9 +10,9 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-{{- if .Values.sources.insecureForward.enable }}
+{{- if .Values.source.insecureForward.enable }}
     - name: insecureforward
-      port: {{ .Values.sources.insecureForward.port }}
+      port: {{ .Values.source.insecureForward.port }}
       targetPort: insecureforward
       protocol: TCP
 {{- end }}

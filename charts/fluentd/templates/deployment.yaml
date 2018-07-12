@@ -26,13 +26,13 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-{{- if .Values.sources.insecureForward.enable }}
+{{- if .Values.source.insecureForward.enable }}
             - name: insecureforward
-              containerPort: {{ .Values.sources.insecureForward.port }}
+              containerPort: {{ .Values.source.insecureForward.port }}
               protocol: TCP
 {{- end }}
           env:
-{{- if .Values.targets.logzio.enable }}
+{{- if .Values.target.logzio.enable }}
             - name: LOGZIO_TOKEN
               valueFrom:
                 secretKeyRef:
