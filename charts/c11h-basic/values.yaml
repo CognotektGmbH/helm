@@ -1,8 +1,7 @@
 # The purpose of this file is to annotate configuration options for the c11h-basic starter chart.
 
-# Name is very important as it is used for labeling all resources.
-# No default is provided in order to fail if missing.
-# name: ""
+# Name is very important as it is used for labeling all resources. PLEASE override.
+name: "c11h-basic"
 replicaCount: 1
 
 image:
