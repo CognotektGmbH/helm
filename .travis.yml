@@ -10,7 +10,7 @@ env:
   ARCH=amd64
   URL=https://storage.googleapis.com/kubernetes-helm/helm
   BUCKET=helm.cognotekt.com
-  BUCKET_KEY=ops/
+  BUCKET_KEY=charts/
 
 # highly inspired from this: https://is.gd/vc0Zhz
 script:
