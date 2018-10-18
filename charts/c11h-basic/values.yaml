@@ -1,0 +1,66 @@
+# The purpose of this file is to annotate configuration options for the c11h-basic starter chart.
+
+# Name is very important as it is used for labeling all resources.
+# No default is provided in order to fail if missing.
+# name: ""
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: stable
+  pullPolicy: IfNotPresent
+  # imagePullSecrets: regcred
+  # An array of objects partially following this spec:
+  # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#containerport-v1-core
+  # hostPort and hostIP not supported
+  ports:
+    - name: blah
+      containerPort: 1234
+  env:
+    # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#envvar-v1-core
+    # - name: ENV_NAME
+    #   valueFrom:
+    #   value:
+
+service:
+  enabled: true
+  type: ClusterIP # Only ClusterIP and LoadBalancer are supported.
+  # An array of objects following this spec:
+  # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#serviceport-v1-core
+  # NodePort unsupported!
+  ports:
+    - name: blah
+      port: 1234
+      targetPort: 1234
+
+ingress:
+  enabled: false
+  # Traefik is the recommended ingress controller
+  annotations:
+    kubernetes.io/ingress.class: traefik
+  path: /
+  tls: [] # TLS can be configured manually
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+  servicePort: # 8080 Incoming port of service with the SAME name
+  # to be set as --set ingress.hosts={a,b,c}
+  hosts: {}
+  # 1 host -> 1 service
+
+resources: {} # From Helm:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+# Also supported:
+nodeSelector: {}
+tolerations: []
+affinity: {}

@@ -1,13 +1,14 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "test.fullname" . -}}
+{{- $fullName := include "chart.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
+{{- $servicePort := .Values.ingress.servicePort -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    app: {{ template "test.name" . }}
-    chart: {{ template "test.chart" . }}
+    app: {{ template "chart.name" . }}
+    chart: {{ template "chart.label" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 {{- with .Values.ingress.annotations }}
@@ -33,6 +34,6 @@ spec:
           - path: {{ $ingressPath }}
             backend:
               serviceName: {{ $fullName }}
-              servicePort: http
+              servicePort: {{ $servicePort }}
   {{- end }}
 {{- end }}
