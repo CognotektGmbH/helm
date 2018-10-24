@@ -46,6 +46,20 @@ spec:
               containerPort: {{ .containerPort }}
               protocol: TCP
           {{- end }}
+          {{- with .Values.image.livenessProbe }}
+          livenessProbe:
+            httpGet:
+              path: {{ .path }}
+              port: {{ .port }}
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+          {{- end }}
+          {{- with .Values.image.readinessProbe }}
+          readinessProbe:
+            httpGet:
+              path: {{ .path }}
+              port: {{ .port }}
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+          {{- end }}
           env:
             {{- range .Values.image.env }}
             - name: {{ .name}}
