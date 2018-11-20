@@ -59,6 +59,9 @@ resources: {} # From Helm:
   #  cpu: 100m
   #  memory: 128Mi
 
+secret:
+  enabled: false
+
 # Also supported:
 nodeSelector: {}
 tolerations: []
