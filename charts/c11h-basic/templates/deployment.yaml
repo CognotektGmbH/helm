@@ -40,6 +40,12 @@ spec:
         - name: {{ .Values.name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.securityContext }}
+          securityContext:
+            capabilities:
+              add:
+                {{ toYaml .Values.securityContext | indent 8 }}
+          {{- end }}
           ports:
           {{- range .Values.image.ports }}
             - name: {{ .name }}
