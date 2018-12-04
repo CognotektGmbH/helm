@@ -53,6 +53,7 @@ vpn:
     repository: 026861505133.dkr.ecr.eu-central-1.amazonaws.com/somevpncontainer
     pullPolicy: Always
     tag: latest
+  env:
 
 resources: {} # From Helm:
   # We usually recommend not to specify default resources and to leave this as a conscious
