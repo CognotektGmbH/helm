@@ -51,6 +51,7 @@ vpn:
   enabled: false
   image:
     repository: 026861505133.dkr.ecr.eu-central-1.amazonaws.com/somevpncontainer
+    pullPolicy: Always
     tag: latest
 
 resources: {} # From Helm:
