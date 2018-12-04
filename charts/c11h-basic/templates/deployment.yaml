@@ -85,7 +85,6 @@ spec:
           {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-    {{- with .Values.nodeSelector }}
       {{- if .Values.vpn.enabled }}
         - name: vpn
           image: "{{ .Values.vpn.image.repository }}:{{ .Values.vpn.image.tag }}"
@@ -94,7 +93,21 @@ spec:
             capabilities:
               add:
                 - NET_ADMIN
+          env:
+            {{- range .Values.vpn.env }}
+            - name: {{ .name}}
+            {{ if .value }}
+              value: {{ quote .value }}
+            {{ else if .valueFrom }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .valueFrom.secretKeyRef.name }}
+                  key: {{ .valueFrom.secretKeyRef.key }}
+                  optional: {{ .valueFrom.secretKeyRef.optional }}
+            {{- end}}
+            {{- end}}
       {{- end }}
+    {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
     {{- end }}
