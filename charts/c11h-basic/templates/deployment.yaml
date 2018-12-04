@@ -88,7 +88,7 @@ spec:
         {{- if .Values.vpn.enabled }}
         - name: vpn
           image: "{{ .Values.vpn.image.repository }}:{{ .Values.vpn.image.tag }}"
-          imagePullPolicy: {{ .Values.image.vpn.pullPolicy }}
+          imagePullPolicy: {{ .Values.vpn.image.pullPolicy }}
           securityContext:
             capabilities:
               add:
