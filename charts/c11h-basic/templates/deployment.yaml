@@ -85,7 +85,7 @@ spec:
           {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-      {{- if .Values.vpn.enabled }}
+        {{- if .Values.vpn.enabled }}
         - name: vpn
           image: "{{ .Values.vpn.image.repository }}:{{ .Values.vpn.image.tag }}"
           imagePullPolicy: {{ .Values.image.vpn.pullPolicy }}
