@@ -50,7 +50,7 @@ ingress:
 vpn:
   enabled: false
   image:
-    repository: 026861505133.dkr.ecr.eu-central-1.amazonaws.com/somevpncontainer
+    repository: mysecretregistry/somevpncontainer
     pullPolicy: Always
     tag: latest
   env:
