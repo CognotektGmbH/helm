@@ -21,14 +21,12 @@ image:
     #   valueFrom:
     #   value:
   livenessProbe:
-    httpGet:
-      path: /
-      port: web
+    path: /
+    port: web
     initialDelaySeconds: 180
   readinessProbe:
-    httpGet:
-      path: /
-      port: web
+    path: /
+    port: web
     initialDelaySeconds: 5
 
 
