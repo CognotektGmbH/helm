@@ -20,6 +20,17 @@ image:
     # - name: ENV_NAME
     #   valueFrom:
     #   value:
+  livenessProbe:
+    httpGet:
+      path: /
+      port: web
+    initialDelaySeconds: 180
+  readinessProbe:
+    httpGet:
+      path: /
+      port: web
+    initialDelaySeconds: 5
+
 
 service:
   enabled: true
