@@ -55,16 +55,16 @@ spec:
           {{- with .Values.image.livenessProbe }}
           livenessProbe:
             httpGet:
-              path: {{ .valueFrom.livenessProbe.path }}
-              port: {{ .valueFrom.livenessProbe.port }}
-            initialDelaySeconds: {{ .valueFrom.livenessProbe.initialDelaySeconds }}
+              path: {{ .valueFrom.path }}
+              port: {{ .valueFrom.port }}
+            initialDelaySeconds: {{ .valueFrom.initialDelaySeconds }}
           {{- end }}
           {{- with .Values.image.readinessProbe }}
           readinessProbe:
             httpGet:
-              path: {{ .valueFrom.readinessProbe.path }}
-              port: {{ .valueFrom.readinessProbe.port }}
-            initialDelaySeconds: {{ .valueFrom.readinessProbe.initialDelaySeconds }}
+              path: {{ .valueFrom.path }}
+              port: {{ .valueFrom.port }}
+            initialDelaySeconds: {{ .valueFrom.initialDelaySeconds }}
           {{- end }}
           env:
             {{- range .Values.image.env }}
