@@ -67,14 +67,15 @@ spec:
             initialDelaySeconds: {{ .initialDelaySeconds }}
           {{- end }}
           env:
+            {{- $dot := . }}
             {{- range .Values.image.env }}
             - name: {{ .name}}
             {{ if .value }}
-              value: {{ quote .value }}
+              value: {{ tpl .value $dot | quote }}
             {{ else if .valueFrom }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ .valueFrom.secretKeyRef.name }}
+                  name: {{ tpl .valueFrom.secretKeyRef.name $dot }}
                   key: {{ .valueFrom.secretKeyRef.key }}
                   optional: {{ .valueFrom.secretKeyRef.optional }}
             {{- end}}
