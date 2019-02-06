@@ -38,7 +38,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Values.name }}
-          image: "{{ tpl .Values.image.repository . }}:{{ tpl .Values.image.tag . }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.securityContext }}
           securityContext:
@@ -67,15 +67,14 @@ spec:
             initialDelaySeconds: {{ .initialDelaySeconds }}
           {{- end }}
           env:
-            {{- $dot := . }}
             {{- range .Values.image.env }}
             - name: {{ .name}}
             {{ if .value }}
-              value: {{ tpl .value $dot | quote }}
+              value: {{ quote .value }}
             {{ else if .valueFrom }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ tpl .valueFrom.secretKeyRef.name $dot }}
+                  name: {{ .valueFrom.secretKeyRef.name }}
                   key: {{ .valueFrom.secretKeyRef.key }}
                   optional: {{ .valueFrom.secretKeyRef.optional }}
             {{- end}}
