@@ -70,6 +70,9 @@ resources: {} # From Helm:
 secret:
   enabled: false
 
+configMap:
+  enabled: false
+
 # Also supported:
 nodeSelector: {}
 tolerations: []
