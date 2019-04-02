@@ -73,10 +73,17 @@ spec:
               value: {{ quote .value }}
             {{ else if .valueFrom }}
               valueFrom:
+              {{ if .valueFrom.secretKeyRef }}
                 secretKeyRef:
                   name: {{ .valueFrom.secretKeyRef.name }}
                   key: {{ .valueFrom.secretKeyRef.key }}
                   optional: {{ .valueFrom.secretKeyRef.optional }}
+              {{ else if .valueFrom.configMapKeyRef }}
+                configMapKeyRef:
+                  name: {{ .valueFrom.configMapKeyRef.name }}
+                  key: {{ .valueFrom.configMapKeyRef.key }}
+                  optional: {{ .valueFrom.configMapKeyRef.optional }}
+              {{- end}}
             {{- end}}
             {{- end}}
           {{- if .Values.image.volumeMounts }}
