@@ -1,0 +1,58 @@
+# https://hub.docker.com/r/atlassian/confluence-server
+# nameOverride: confluence
+
+image:
+  repository: atlassian/confluence-server
+  tag: 6.9.0
+  pullPolicy: IfNotPresent
+
+confluence:
+  reverseProxyHost: confluence.example.com
+  reverseProxyPort: 443
+  reverseProxyScheme: https
+  javaHeapSize: 1024m
+  javaMemoryOptions: "-XX:MaxMetaspaceSize=512m -XX:MaxDirectMemorySize=10m"
+  javaOptions: ""
+  #  podAnnotations:
+
+synchrony:
+  ## disable Synchrony by default
+  javaHeapSize: 0m
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: enabled
+  annotations: {}
+    # kubernetes.io/ingress.class: traefik
+  path: /
+  hosts:
+    - confluence.example.com 
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  size: 20Gi
+  #existingClaim: confluence
+
+resources:
+  # 250m CPU is from the official helm chart, 3000Mi is because we consume now
+  # 1900 per Grafana
+  requests:
+    cpu: 500m
+    memory: 2Gi
+  limits:
+    cpu: 500m
+    memory: 2Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
