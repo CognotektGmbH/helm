@@ -8,14 +8,22 @@ metadata:
     chart: {{ template "chart.label" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+{{ if .Values.service.metrics.enabled -}}
+    metrics: "true"
+{{ end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-  {{- range .Values.service.ports }}
+  {{- range .Values.service.ports -}}
     - port: {{ .port }}
       targetPort: {{ .targetPort | default .port }}
       protocol:  {{ .protocol | default "TCP" }}
       name: {{ .name }}
+  {{- end }}
+  {{- if .Values.service.metrics.enabled -}}
+    - name: metrics
+      port: {{ .Values.service.metrics.port }}
+      targetPort: {{ .Values.service.metrics.targetPort }}
   {{- end }}
   selector:
     app: {{ template "chart.name" . }}
