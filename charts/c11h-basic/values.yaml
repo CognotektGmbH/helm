@@ -36,7 +36,7 @@ service:
   # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#serviceport-v1-core
   # NodePort unsupported!
   ports:
-    # just don't name it metrics if enabled
+    # just don't name it metrics if enabled above
     - name: blah
       port: 1234
       targetPort: 1234
