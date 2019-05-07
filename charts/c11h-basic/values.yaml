@@ -23,11 +23,24 @@ image:
 
 service:
   enabled: true
+  # Sets a label that identifies the service as ready for Prometheus scraping
+  metrics:
+    # metrics are collected at the /metrics endpoint
+    enabled: false
+    # creates a port named metrics on the created service
+    # use it when exposing metrics on a different port than
+    # application requests
+    enableMetricsServicePort: false
+    # port is set at the service level
+    port: 8080
+    # targetPort should be exposed by your pod
+    targetPort: 8080
   type: ClusterIP # Only ClusterIP and LoadBalancer are supported.
   # An array of objects following this spec:
   # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#serviceport-v1-core
   # NodePort unsupported!
   ports:
+    # just don't name it metrics or reuse previously set port and targetPort if enabled above
     - name: blah
       port: 1234
       targetPort: 1234
