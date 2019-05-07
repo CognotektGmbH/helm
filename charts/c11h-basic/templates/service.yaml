@@ -20,7 +20,7 @@ spec:
       protocol:  {{ .protocol | default "TCP" }}
       name: {{ .name }}
   {{- end }}
-  {{- if .Values.service.metrics.enableMetricsServicePort -}}
+  {{- if .Values.service.metrics.enableMetricsServicePort }}
     - name: metrics
       port: {{ .Values.service.metrics.port }}
       targetPort: {{ .Values.service.metrics.targetPort }}
