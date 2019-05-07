@@ -7,6 +7,9 @@ metadata:
     chart: {{ template "chart.label" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    {{- if .Values.labels }}
+{{ toYaml .Values.labels | indent 4}}
+    {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
