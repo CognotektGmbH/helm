@@ -8,9 +8,9 @@ metadata:
     chart: {{ template "chart.label" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-{{ if .Values.service.metrics.enabled -}}
+{{- if .Values.service.metrics.enabled }}
     metrics: "true"
-{{ end }}
+{{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
