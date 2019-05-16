@@ -70,6 +70,26 @@ spec:
             initialDelaySeconds: {{ .initialDelaySeconds }}
           {{- end }}
           env:
+            - name: CPU_REQUEST
+              valueFrom:
+                resourceFieldRef:
+                  containerName: {{ .Values.name }}
+                  resource: requests.cpu
+            - name: CPU_LIMIT
+              valueFrom:
+                resourceFieldRef:
+                  containerName: {{ .Values.name }}
+                  resource: limits.cpu
+            - name: MEM_REQUEST
+              valueFrom:
+                resourceFieldRef:
+                  containerName: {{ .Values.name }}
+                  resource: requests.memory
+            - name: MEM_LIMIT
+              valueFrom:
+                resourceFieldRef:
+                  containerName: {{ .Values.name }}
+                  resource: limits.memory
             {{- range .Values.image.env }}
             - name: {{ .name}}
             {{ if .value }}
