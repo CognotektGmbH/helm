@@ -18,8 +18,8 @@ spec:
       release: {{ .Release.Name }}
   strategy:
     rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+      maxSurge: {{ .Values.rollingUpdate.maxSurgeCount }}
+      maxUnavailable: {{ .Values.rollingUpdate.maxUnavaliableCount }}
   minReadySeconds: 5
   template:
     metadata:
