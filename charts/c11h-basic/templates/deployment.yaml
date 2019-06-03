@@ -89,6 +89,8 @@ spec:
               {{- end}}
             {{- end}}
             {{- end}}
+          securityContext:
+            runAsUser: {{ .Values.image.runAsUser }}
           {{- if .Values.image.volumeMounts }}
           volumeMounts:
 {{ toYaml .Values.image.volumeMounts | indent 12 }}
