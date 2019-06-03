@@ -30,6 +30,10 @@ image:
     # - name: ENV_NAME
     #   valueFrom:
     #   value:
+    
+  # Sets the userid of the main process in the container. Regular users start at 1000, root means 0
+  # Running as root is discouraged and not allowed when running restricted pod security policies
+  runAsUser: 1000
 
 service:
   enabled: true
