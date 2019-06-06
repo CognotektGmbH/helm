@@ -7,7 +7,7 @@ replicaCount: 1
 # See https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 rollingUpdate:
   maxSurgeCount: 1
-  maxUnavaliableCount: 1
+  maxUnavaliableCount: 0
 
 
 ## Custom extra labels
