@@ -58,6 +58,9 @@ service:
     - name: blah
       port: 1234
       targetPort: 1234
+  # annotations:
+  #   service.beta.kubernetes.io/fancy-new-aws-feature: true
+
 
 ingress:
   enabled: false
