@@ -59,8 +59,8 @@
 
 ## Configure integrated Prometheus metrics exporter
 ## ref: https://docs.gitlab.com/runner/monitoring/#configuration-of-the-metrics-http-server
-# metrics:
-#  enabled: true
+metrics:
+ enabled: true
 
 ## Configuration for the Pods that that the runner launches for each new job
 ##
@@ -102,64 +102,26 @@ runners:
   ##   --from-literal=accesskey="YourAccessKey" \
   ##   --from-literal=secretkey="YourSecretKey"
   ## ref: https://kubernetes.io/docs/concepts/configuration/secret/
-  cache:
-  ## General settings
-  #   cachePath: "spot"
-  #   cacheShared: true
-  #   cacheType: s3
+  cache: {}
 
-  #   ## S3 settings
-  #   s3BucketLocation: <aws-region>
-  #   s3BucketName:
-  #   s3ServerAddress: s3.amazonaws.com
-  #   secretName: s3access
-
-  # docker:
-  #  image: "docker:stable"
-  #  networkMode: "bridge"
-  #  privileged: true
-  #  pullPolicy: "if-not-present"
-  #  shmSize: "0"
+  # See https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
+  docker: {}
 
   # These parameters determine the settings of all Spot Instances spawned by the runner
   # See https://docs.docker.com/machine/drivers/aws/ for additional Docker Machine driver
   # options for Amazon EC2.
-  # machine:
-  #  driver: amazonec2
-  #  idleCount: 1
-  #  idleTime: 7200
-  #  maxBuilds: 40
-    # Enable this only if spawning Spot Runners on the legacy VPC.
-    # engineInsecureRegistry:
-    #   - insecureregistry1.company.com
-    #   - insecureregistry2.company.com
-    # ec2:
-    # accessKey: 
-    #  ami: ami-06142be4afc3d5b1b
-    #  blockDurationMinutes: 120
-    #  iamInstanceProfile: gitlab-runner
-    #  instanceType: 
-    #  privateAddressOnly: true
-    #  region: eu-central-1
-    #  requestSpotInstance: true
-    #  rootSize: 50
-    #  secretKey: 
-    #  securityGroup: 
-    #  spotPrice: 0.5
-    #  subnetId: 
-    #  tags: 
-    #  usePrivateAddress: true
-    #  vpcId:
-    #  zone: b
+  machine:
+   ec2:
+    accessKey: your-key
 
   ## Specify node labels for CI job pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
   ##
-  # nodeSelector: {}
+  nodeSelector: {}
 
   ## Specify pod labels for CI job pods
   ##
-  # podLabels: {}
+  podLabels: {}
 
   ## Specify annotations for job pods, useful for annotations such as iam.amazonaws.com/role
   # podAnnotations: {}
