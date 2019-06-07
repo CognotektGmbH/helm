@@ -1,0 +1,194 @@
+## GitLab Runner Image
+##
+## By default it's using gitlab/gitlab-runner:alpine-v{VERSION}
+## where {VERSION} is taken from Chart.yaml from appVersion field
+##
+## ref: https://hub.docker.com/r/gitlab/gitlab-runner/tags/
+##
+# image: gitlab/gitlab-runner:alpine-v11.6.0
+
+## Specify a imagePullPolicy
+## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+# imagePullPolicy: IfNotPresent
+
+## The GitLab Server URL (with protocol) that want to register the runner against
+## ref: https://docs.gitlab.com/runner/commands/README.html#gitlab-runner-register
+##
+# gitlabUrl: https://yourgitlab.com
+
+## The Registration Token for adding new Runners to the GitLab Server. This must
+## be retrieved from your GitLab Instance.
+## ref: https://docs.gitlab.com/ce/ci/runners/README.html
+##
+# runnerRegistrationToken: 
+
+# fullNameOverride: c11h-spot-runner
+
+## Unregister all runners before termination
+##
+## Updating the runner's chart version or configuration will cause the runner container
+## to be terminated and created again. This may cause your Gitlab instance to reference
+## non-existant runners. Un-registering the runner before termination mitigates this issue.
+## ref: https://docs.gitlab.com/runner/commands/README.html#gitlab-runner-unregister
+##
+# unregisterRunners: true
+
+## Set the certsSecretName in order to pass custom certficates for GitLab Runner to use
+## Provide resource name for a Kubernetes Secret Object in the same namespace,
+## this is used to populate the /etc/gitlab-runner/certs directory
+## ref: https://docs.gitlab.com/runner/configuration/tls-self-signed.html#supported-options-for-self-signed-certificates
+##
+# certsSecretName:
+
+## Configure the maximum number of concurrent jobs
+## ref: https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-global-section
+##
+# concurrent: 10
+
+## Defines in seconds how often to check GitLab for a new builds
+## ref: https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-global-section
+##
+# checkInterval: 5
+
+## Configure GitLab Runner's logging level. Available values are: debug, info, warn, error, fatal, panic
+## ref: https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-global-section
+##
+# logLevel:
+
+## Configure integrated Prometheus metrics exporter
+## ref: https://docs.gitlab.com/runner/monitoring/#configuration-of-the-metrics-http-server
+metrics:
+ enabled: true
+
+## Configuration for the Pods that that the runner launches for each new job
+##
+runners:
+  ## Default container image to use for builds when none is specified
+  ##
+  # image: docker:stable
+
+  ## Specify whether the runner should be locked to a specific project: true, false. Defaults to true.
+  ##
+  # locked: true
+
+  ## Specify the tags associated with the runner. Comma-separated list of tags.
+  ##
+  ## ref: https://docs.gitlab.com/ce/ci/runners/#using-tags
+  ##
+  # tags: ""
+
+  ## Run all containers with the privileged flag enabled
+  ## This will allow the docker:dind image to run if you need to run Docker
+  ## commands. Please read the docs before turning this on:
+  ## ref: https://docs.gitlab.com/runner/executors/kubernetes.html#using-docker-dind
+  ##
+  # privileged: false
+
+  ## The name of the secret containing runner-token and runner-registration-token
+  # secret: gitlab-runner
+
+  ## Distributed runners caching
+  ## ref: https://gitlab.com/gitlab-org/gitlab-runner/blob/master/docs/configuration/autoscale.md#distributed-runners-caching
+  ##
+  ## If you want to use s3 based distributing caching:
+  ## First of all you need to uncomment General settings and S3 settings sections.
+  ##
+  ## Create a secret 's3access' containing 'accesskey' & 'secretkey'
+  ## ref: https://aws.amazon.com/blogs/security/wheres-my-secret-access-key/
+  ##
+  ## $ kubectl create secret generic s3access \
+  ##   --from-literal=accesskey="YourAccessKey" \
+  ##   --from-literal=secretkey="YourSecretKey"
+  ## ref: https://kubernetes.io/docs/concepts/configuration/secret/
+  cache: {}
+
+  # See https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section
+  docker: {}
+
+  # These parameters determine the settings of all Spot Instances spawned by the runner
+  # See https://docs.docker.com/machine/drivers/aws/ for additional Docker Machine driver
+  # options for Amazon EC2.
+  machine:
+   ec2:
+    accessKey: your-key
+
+  ## Specify node labels for CI job pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+  ##
+  nodeSelector: {}
+
+  ## Specify pod labels for CI job pods
+  ##
+  podLabels: {}
+
+  ## Specify annotations for job pods, useful for annotations such as iam.amazonaws.com/role
+  # podAnnotations: {}
+
+  ## Configure environment variables that will be injected to the pods that are created while
+  ## the build is running. These variables are passed as parameters, i.e. `--env "NAME=VALUE"`,
+  ## to `gitlab-runner register` command.
+  ##
+  ## Note that `envVars` (see below) are only present in the runner pod, not the pods that are
+  ## created for each build.
+  ##
+  ## ref: https://docs.gitlab.com/runner/commands/#gitlab-runner-register
+  ##
+  # env:
+  #   NAME: VALUE
+
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources: {}
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+  # Example: The gitlab runner manager should not run on spot instances so you can assign
+  # them to the regular worker nodes only.
+  # node-role.kubernetes.io/worker: "true"
+
+## List of node taints to tolerate (requires Kubernetes >= 1.6)
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+  # Example: Regular worker nodes may have a taint, thus you need to tolerate the taint
+  # when you assign the gitlab runner manager with nodeSelector or affinity to the nodes.
+  # - key: "node-role.kubernetes.io/worker"
+  #   operator: "Exists"
+
+## Configure environment variables that will be present when the registration command runs
+## This provides further control over the registration process and the config.toml file
+## ref: `gitlab-runner register --help`
+## ref: https://docs.gitlab.com/runner/configuration/advanced-configuration.html
+##
+# envVars:
+#   - name: RUNNER_EXECUTOR
+#     value: kubernetes
+
+## list of hosts and IPs that will be injected into the pod's hosts file
+hostAliases: []
+  # Example:
+  # - ip: "127.0.0.1"
+  #   hostnames:
+  #   - "foo.local"
+  #   - "bar.local"
+  # - ip: "10.1.2.3"
+  #   hostnames:
+  #   - "foo.remote"
+  #   - "bar.remote"
+
+## Annotations to be added to manager pod
+##
+podAnnotations: {}
+  # Example:
+  # iam.amazonaws.com/role: <my_role_arn>
