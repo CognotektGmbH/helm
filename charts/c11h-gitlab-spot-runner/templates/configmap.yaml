@@ -78,10 +78,6 @@ data:
         --machine-machine-options "amazonec2-subnet-id={{ .Values.runners.machine.ec2.subnetId }}" \
         --machine-machine-options "amazonec2-tags={{ .Values.runners.machine.ec2.tags }}" \
         --machine-machine-options "amazonec2-vpc-id={{ .Values.runners.machine.ec2.vpcId }}" \
-        --machine-off-peak-periods value
-        --machine-off-peak-timezone value
-        --machine-off-peak-idle-count value
-        --machine-off-peak-idle-time value
         {{- range .Values.runners.machine.engineInsecureRegistry }}
         --machine-machine-options "engine-insecure-registry={{ . }}" \
         {{- end }}
