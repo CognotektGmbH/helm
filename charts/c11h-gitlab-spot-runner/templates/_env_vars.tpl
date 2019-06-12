@@ -6,7 +6,7 @@
 - name: RUNNER_EXECUTOR
   value: "docker+machine"
 - name: RUNNER_LIMIT
-  value: {{ default 0 .Values.runners.limit }}
+  value: {{ default "0" .Values.runners.limit | quote }}
 - name: RUNNER_NAME
   value: {{ default "spot-runner" .Values.fullNameOverride | quote }}
 - name: REGISTER_LOCKED
