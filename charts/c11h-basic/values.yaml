@@ -76,6 +76,10 @@ ingress:
   # to be set as --set ingress.hosts={a,b,c}
   hosts: {}
   # 1 host -> 1 service
+  additionalPaths: []
+  #  - path: /path
+  #    serviceName: name  # defaults to the name of this service
+  #    servicePort: 123   # defaults to .Values.ingress.servicePort
 
 vpn:
   enabled: false

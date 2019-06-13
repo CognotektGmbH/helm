@@ -2,6 +2,7 @@
 {{- $fullName := include "chart.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
 {{- $servicePort := .Values.ingress.servicePort -}}
+{{- $additionalPaths := .Values.ingress.additionalPaths -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -35,5 +36,11 @@ spec:
             backend:
               serviceName: {{ $fullName }}
               servicePort: {{ $servicePort }}
+        {{- range $additionalPaths }}
+          - path: {{ .path }}
+            backend:
+              serviceName: {{ .serviceName | default $fullName }}
+              servicePort: {{ .servicePort | default $servicePort }}
+        {{- end }}
   {{- end }}
 {{- end }}
