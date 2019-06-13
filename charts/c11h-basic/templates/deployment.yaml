@@ -26,6 +26,9 @@ spec:
       labels:
         app: {{ template "chart.name" . }}
         release: {{ .Release.Name }}
+        {{- if .Values.labels }}
+{{ toYaml .Values.labels | indent 8}}
+        {{- end }}
     spec:
       {{- if .Values.image.imagePullSecrets }}
       imagePullSecrets:
