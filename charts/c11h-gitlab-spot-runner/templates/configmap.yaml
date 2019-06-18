@@ -67,6 +67,7 @@ data:
         --machine-machine-options "amazonec2-access-key={{ .Values.runners.machine.ec2.accessKey }}" \
         --machine-machine-options "amazonec2-ami={{ .Values.runners.machine.ec2.ami }}" \
         --machine-machine-options "amazonec2-block-duration-minutes={{ .Values.runners.machine.ec2.blockDurationMinutes }}" \
+        --machine-machine-options "amazonec2-device-name={{ .Values.runners.machine.ec2.deviceName }}" \
         --machine-machine-options "amazonec2-iam-instance-profile={{ .Values.runners.machine.ec2.iamInstanceProfile }}" \
         --machine-machine-options "amazonec2-instance-type={{ .Values.runners.machine.ec2.instanceType }}" \
         --machine-machine-options "amazonec2-region={{ .Values.runners.machine.ec2.region }}" \
@@ -75,6 +76,7 @@ data:
         --machine-machine-options "amazonec2-secret-key={{ .Values.runners.machine.ec2.secretKey }}" \
         --machine-machine-options "amazonec2-security-group={{ .Values.runners.machine.ec2.securityGroup }}" \
         --machine-machine-options "amazonec2-spot-price={{ .Values.runners.machine.ec2.spotPrice }}" \
+        --machine-machine-options "amazonec2-ssh-user={{ .Values.runners.machine.ec2.sshUser }}" \
         --machine-machine-options "amazonec2-subnet-id={{ .Values.runners.machine.ec2.subnetId }}" \
         --machine-machine-options "amazonec2-tags={{ .Values.runners.machine.ec2.tags }}" \
         --machine-machine-options "amazonec2-vpc-id={{ .Values.runners.machine.ec2.vpcId }}" \
