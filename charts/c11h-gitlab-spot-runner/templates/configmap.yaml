@@ -65,13 +65,11 @@ data:
 
       /entrypoint register \
         # Not needed if AWS permissions are granted via host permissions or KIAM
-        {{- if .Values.runners.machine.ec2.accessKey }}
+        {{- if and .Values.runners.machine.ec2.accessKey .Values.runners.machine.ec2.secretKey }}
         --machine-machine-options "amazonec2-access-key={{ .Values.runners.machine.ec2.accessKey }}" \
-        {{- end }}
-        {{- if .Values.runners.machine.ec2.secretKey }}
         --machine-machine-options "amazonec2-secret-key={{ .Values.runners.machine.ec2.secretKey }}" \
         {{- end }}
-        
+
         --machine-machine-options "amazonec2-ami={{ .Values.runners.machine.ec2.ami }}" \
         --machine-machine-options "amazonec2-block-duration-minutes={{ .Values.runners.machine.ec2.blockDurationMinutes }}" \
         --machine-machine-options "amazonec2-device-name={{ .Values.runners.machine.ec2.deviceName }}" \
