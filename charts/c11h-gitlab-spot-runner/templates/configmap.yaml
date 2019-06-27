@@ -64,7 +64,14 @@ data:
       echo "Registration attempt ${i} of ${MAX_REGISTER_ATTEMPTS}"
 
       /entrypoint register \
+        # Not needed if AWS permissions are granted via host permissions or KIAM
+        {{- if .Values.runners.machine.ec2.accessKey }}
         --machine-machine-options "amazonec2-access-key={{ .Values.runners.machine.ec2.accessKey }}" \
+        {{- end }}
+        {{- if .Values.runners.machine.ec2.secretKey }}
+        --machine-machine-options "amazonec2-secret-key={{ .Values.runners.machine.ec2.secretKey }}" \
+        {{- end }}
+        
         --machine-machine-options "amazonec2-ami={{ .Values.runners.machine.ec2.ami }}" \
         --machine-machine-options "amazonec2-block-duration-minutes={{ .Values.runners.machine.ec2.blockDurationMinutes }}" \
         --machine-machine-options "amazonec2-device-name={{ .Values.runners.machine.ec2.deviceName }}" \
@@ -73,7 +80,6 @@ data:
         --machine-machine-options "amazonec2-region={{ .Values.runners.machine.ec2.region }}" \
         --machine-machine-options "amazonec2-request-spot-instance={{ .Values.runners.machine.ec2.requestSpotInstance }}" \
         --machine-machine-options "amazonec2-root-size={{ .Values.runners.machine.ec2.rootSize }}" \
-        --machine-machine-options "amazonec2-secret-key={{ .Values.runners.machine.ec2.secretKey }}" \
         --machine-machine-options "amazonec2-security-group={{ .Values.runners.machine.ec2.securityGroup }}" \
         --machine-machine-options "amazonec2-spot-price={{ .Values.runners.machine.ec2.spotPrice }}" \
         --machine-machine-options "amazonec2-ssh-user={{ .Values.runners.machine.ec2.sshUser }}" \
