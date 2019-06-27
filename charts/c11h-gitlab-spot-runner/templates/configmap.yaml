@@ -64,7 +64,6 @@ data:
       echo "Registration attempt ${i} of ${MAX_REGISTER_ATTEMPTS}"
 
       /entrypoint register \
-        # Not needed if AWS permissions are granted via host permissions or KIAM
         {{- if and .Values.runners.machine.ec2.accessKey .Values.runners.machine.ec2.secretKey }}
         --machine-machine-options "amazonec2-access-key={{ .Values.runners.machine.ec2.accessKey }}" \
         --machine-machine-options "amazonec2-secret-key={{ .Values.runners.machine.ec2.secretKey }}" \
