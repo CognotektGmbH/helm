@@ -43,8 +43,8 @@ data:
     fi
 
     # Run pre-entrypoint custom commands
-    if [[ -f /scripts/custom-commands ]]; then
-      sh /scripts/custom-commands
+    if ! sh /scripts/custom-commands; then
+      exit 1
     fi
 
     # Start the runner
