@@ -64,7 +64,7 @@ metrics:
 
 ## Defines a sequence of shell commands that must be executed prior to the invocation
 ## of the gitlab runner container
-# preEntrypointCommands
+preEntrypointCommands: []
 
 ## Configuration for the Pods that that the runner launches for each new job
 ##
