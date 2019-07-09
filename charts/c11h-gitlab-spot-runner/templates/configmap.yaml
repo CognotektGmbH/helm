@@ -42,6 +42,11 @@ data:
       exit 1
     fi
 
+    # Run pre-entrypoint custom commands
+    if ! sh /scripts/custom-commands; then
+      exit 1
+    fi
+
     # Start the runner
     /entrypoint run --user=gitlab-runner \
       --working-directory=/home/gitlab-runner
@@ -115,3 +120,9 @@ data:
     else
       exit 1
     fi
+
+  custom-commands: |
+    #!/bin/bash
+    {{- range .Values.preEntrypointCommands }}
+    {{ . }}
+    {{- end }}
