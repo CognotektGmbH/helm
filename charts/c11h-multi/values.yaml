@@ -1,0 +1,4 @@
+# We start with an almost empty values file because we would otherwise
+# declare a component with an actual name that could not get removed again.
+# Please look in the example folder for populated values files
+name: "my-empty-system"
