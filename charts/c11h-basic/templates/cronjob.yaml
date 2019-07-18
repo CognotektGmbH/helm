@@ -19,6 +19,7 @@ spec:
       template:
         spec:
           containers:
+          - name: scaleup
             image: quay.io/c11h/ops-ci-cluster
             args:
             - /bin/sh
@@ -47,6 +48,7 @@ spec:
       template:
         spec:
           containers:
+          - name: scaledown
             image: quay.io/c11h/ops-ci-cluster
             args:
             - /bin/sh
