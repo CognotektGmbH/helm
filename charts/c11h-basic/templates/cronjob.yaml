@@ -18,6 +18,8 @@ spec:
     spec:
       template:
         spec:
+          securityContext:
+            runAsUser: 1000
           containers:
           - name: scaleup
             image: quay.io/c11h/ops-ci-cluster
@@ -47,6 +49,8 @@ spec:
     spec:
       template:
         spec:
+          securityContext:
+            runAsUser: 1000
           containers:
           - name: scaledown
             image: quay.io/c11h/ops-ci-cluster
