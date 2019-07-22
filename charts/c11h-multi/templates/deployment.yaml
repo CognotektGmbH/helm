@@ -1,0 +1,117 @@
+{{- range .Values.components }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "chart.fullname" $ }}-{{ .name }}
+  labels:
+    app: {{ template "chart.name" $ }}
+    chart: {{ template "chart.label" $ }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+    {{- if .labels }}
+{{ toYaml .labels | indent 4}}
+    {{- end }}
+spec:
+  replicas: {{ .replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "chart.name" $ }}
+      release: {{ $.Release.Name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .rollingUpdate.maxSurgeCount }}
+      maxUnavailable: {{ .rollingUpdate.maxUnavaliableCount }}
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: {{ template "chart.name" $ }}
+        release: {{ $.Release.Name }}
+        {{- if .labels }}
+{{ toYaml .labels | indent 8}}
+        {{- end }}
+    spec:
+      {{- if .image.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .image.imagePullSecrets }}
+      {{- end }}
+      {{- if .volumes }}
+      volumes:
+{{ toYaml .volumes | indent 8}}
+      {{- end }}
+      {{- if .initContainers }}
+      initContainers:
+{{ toYaml .initContainers | indent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .name }}
+          image: "{{ .image.repository }}:{{ .image.tag }}"
+          imagePullPolicy: {{ .image.pullPolicy }}
+          {{- if .securityContext }}
+          securityContext:
+            capabilities:
+              add:
+                {{ toYaml .securityContext | indent 8 }}
+          {{- end }}
+          ports:
+          {{- range .image.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .containerPort }}
+              protocol: TCP
+          {{- end }}
+          {{- with .image.livenessProbe }}
+          livenessProbe:
+            httpGet:
+              path: {{ .path }}
+              port: {{ .port }}
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+          {{- end }}
+          {{- with .image.readinessProbe }}
+          readinessProbe:
+            httpGet:
+              path: {{ .path }}
+              port: {{ .port }}
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+          {{- end }}
+          env:
+            {{- range .image.env }}
+            - name: {{ .name}}
+            {{ if .value }}
+              value: {{ quote .value }}
+            {{ else if .valueFrom }}
+              valueFrom:
+              {{ if .valueFrom.secretKeyRef }}
+                secretKeyRef:
+                  name: {{ .valueFrom.secretKeyRef.name }}
+                  key: {{ .valueFrom.secretKeyRef.key }}
+                  optional: {{ .valueFrom.secretKeyRef.optional }}
+              {{ else if .valueFrom.configMapKeyRef }}
+                configMapKeyRef:
+                  name: {{ .valueFrom.configMapKeyRef.name }}
+                  key: {{ .valueFrom.configMapKeyRef.key }}
+                  optional: {{ .valueFrom.configMapKeyRef.optional }}
+              {{- end}}
+            {{- end}}
+            {{- end}}
+          securityContext:
+            runAsUser: {{ .image.runAsUser }}
+          {{- if .image.volumeMounts }}
+          volumeMounts:
+{{ toYaml .image.volumeMounts | indent 12 }}
+          {{- end }}
+          resources:
+{{ toYaml .resources | indent 12 }}
+    {{- with .nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+---
+    {{ end }}

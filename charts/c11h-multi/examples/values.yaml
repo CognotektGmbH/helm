@@ -1,0 +1,87 @@
+name: "my-system"
+components:
+  - name: simple-component
+    replicaCount: 1
+    rollingUpdate:
+      maxSurgeCount: 1
+      maxUnavaliableCount: 0
+    image:
+      repository: nginx
+      tag: stable
+      pullPolicy: IfNotPresent
+    ports:
+      - name: port_to_outside
+        containerPort: 8080
+    # Nginx requires running as root user
+    runAsUser: 0
+
+    ingress:
+      enabled: false
+    configMap:
+      enabled: false
+    secret:
+      enabled: false
+    service:
+      enabled: false
+
+  - name: complex-component
+    replicaCount: 1
+
+    rollingUpdate:
+      maxSurgeCount: 1
+      maxUnavaliableCount: 0
+    image:
+      repository: nginx
+      tag: stable
+      pullPolicy: IfNotPresent
+    ports:
+      - name: blah
+        containerPort: 1234
+    runAsUser: 1000
+    configMap:
+      enabled: true
+      entries:
+        - name: key1
+          value: value1
+        - name: key2
+          value: value2
+    secret:
+      enabled: true
+      entries:
+        - name: secretkey1
+          value: secretvalue1
+        - name: secretkey2
+          value: secretvalue2
+    ingress:
+      enabled: false
+      annotations:
+        kubernetes.io/ingress.class: traefik
+      hosts:
+        - myservice.mycompany.cloud
+      path: /api
+      servicePort: 8080
+      additionalPaths:
+        - path: /health
+    service:
+      enabled: true
+      # Sets a label that identifies the service as ready for Prometheus scraping
+      metrics:
+        # metrics are collected at the /metrics endpoint
+        enabled: false
+        # creates a port named metrics on the created service
+        # use it when exposing metrics on a different port than
+        # application requests
+        enableMetricsServicePort: false
+        # port is set at the service level
+        port: 9999
+        # targetPort should be exposed by your pod
+        targetPort: 9999
+      type: ClusterIP # Only ClusterIP and LoadBalancer are supported.
+        # An array of objects following this spec:
+        # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#serviceport-v1-core
+        # NodePort unsupported!
+      ports:
+          # just don't name it metrics or reuse previously set port and targetPort if enabled above
+        - name: portname
+          port: 1234
+          targetPort: 1234
