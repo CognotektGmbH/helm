@@ -37,7 +37,7 @@ script:
   # second - upload
   # create / fill repo
   - helm/helm package charts/* --destination ./public
-  - helm/helm repo index --url http://${BUCKET}/${BUCKET_KEY} --merge ./merge/index.html ./public/
+  - helm/helm repo index --url http://${BUCKET}/${BUCKET_KEY} --merge ./merge/index.yaml ./public/
 
 
   - '[[ "$TRAVIS_BRANCH" = "master" && "$TRAVIS_PULL_REQUEST" = false ]] && aws s3 sync public/ s3://${BUCKET}/${BUCKET_KEY} || true'
