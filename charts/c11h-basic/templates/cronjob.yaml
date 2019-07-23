@@ -1,0 +1,62 @@
+{{- if .Values.cronjob.enabled -}}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "chart.fullname" . }}-scale-up
+  {{- if .Values.cronjob.annotations }}
+  annotations:
+{{ toYaml .Values.cronjob.annotations | indent 4 }}
+  {{- end }}
+  labels:
+    app: {{ template "chart.name" . }}
+    chart: {{ template "chart.label" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  schedule: {{ .Values.cronjob.schedule_up | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+          containers:
+          - name: scaleup
+            image: quay.io/c11h/ops-ci-cluster
+            args:
+            - /bin/sh
+            - -c
+            - kubectl scale deployment {{ template "chart.fullname" . }} --replicas={{ .Values.cronjob.max_count }}
+          restartPolicy: OnFailure
+
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "chart.fullname" . }}-scale-down
+  {{- if .Values.cronjob.annotations }}
+  annotations:
+{{ toYaml .Values.cronjob.annotations | indent 4 }}
+  {{- end }}
+  labels:
+    app: {{ template "chart.name" . }}
+    chart: {{ template "chart.label" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  schedule: {{ .Values.cronjob.schedule_down | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+          containers:
+          - name: scaledown
+            image: quay.io/c11h/ops-ci-cluster
+            args:
+            - /bin/sh
+            - -c
+            - kubectl scale deployment {{ template "chart.fullname" . }} --replicas={{ .Values.cronjob.min_count }}
+          restartPolicy: OnFailure
+{{- end }}

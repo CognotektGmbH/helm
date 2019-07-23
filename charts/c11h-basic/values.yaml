@@ -61,6 +61,15 @@ service:
   # annotations:
   #   service.beta.kubernetes.io/fancy-new-aws-feature: true
 
+cronjob:
+  enabled: false
+  # annotations:
+  #   cronjob.beta.kubernetes.io/fancy-new-aws-feature: true
+  # The current schedule is set to 7AM to 9PM european summertime
+  schedule_up: "* 5 * * 1-5" # use cron-syntax here. The set default here is 5AM from monday to friday (UTC)
+  schedule_down: "* 19 * * 1-5" # use cron-syntax here. The set default here is 7PM from monday to friday (UTC)
+  max_count: 1 # count of replicas for scale up
+  min_count: 0 # count of replicas for scale down
 
 ingress:
   enabled: false
