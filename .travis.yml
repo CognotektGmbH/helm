@@ -28,19 +28,19 @@ script:
   # prepare target directories
   - mkdir -p ./public
   - "echo -e 'User-Agent: *\nDisallow: /' > ./public/robots.txt"
-  # create / fill repo
-  - helm/helm package charts/* --destination ./public
-  - helm/helm repo index --url http://${BUCKET}/${BUCKET_KEY} ./public/
-  # NOW install all the pip stuff, cause if we break during the linting step
-  # we saved some time. theurllib3[secure] fixes the annoying
-  # "Insecureplatformwarning"
   - pip install awscli urllib3[secure]
-  # upload to s3
-  # first - sanity check. don't look under $BUCKET_KEY, cause the FIRST time
-  # will not be there :)
+
+  # Store current index.yaml as we need to merge it to the new one (to keep older versions)
+  - mkdir -p ./merge
+  - aws s3 cp s3://helm.cognotekt.com/charts/index.yaml ./merge
   - aws s3 ls s3://${BUCKET}/
   # second - upload
-  - '[[ "$TRAVIS_BRANCH" = "master" && "$TRAVIS_PULL_REQUEST" = false ]] && aws s3 sync --delete public/ s3://${BUCKET}/${BUCKET_KEY} || true'
+  # create / fill repo
+  - helm/helm package charts/* --destination ./public
+  - helm/helm repo index --url http://${BUCKET}/${BUCKET_KEY} --merge ./merge/index.html ./public/
+
+
+  - '[[ "$TRAVIS_BRANCH" = "master" && "$TRAVIS_PULL_REQUEST" = false ]] && aws s3 sync public/ s3://${BUCKET}/${BUCKET_KEY} || true'
 
 notifications:
     email:
