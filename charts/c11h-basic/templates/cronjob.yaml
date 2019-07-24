@@ -59,4 +59,38 @@ spec:
             - -c
             - kubectl scale deployment {{ template "chart.fullname" . }} --replicas={{ .Values.cronjob.min_count }}
           restartPolicy: OnFailure
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+ name: scale-deployment
+labels:
+  app: {{ template "chart.name" . }}
+  chart: {{ template "chart.label" . }}
+  release: {{ .Release.Name }}
+  heritage: {{ .Release.Service }}
+rules:
+- apiGroups: ["extensions"]
+  resources: ["deployments/scale"]
+  verbs: ["*"]
+- apiGroups: ["extensions"]
+  resources: ["deployments"]
+  verbs: ["get"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+ name: scale-deployment-rolebinding
+labels:
+  app: {{ template "chart.name" . }}
+  chart: {{ template "chart.label" . }}
+  release: {{ .Release.Name }}
+  heritage: {{ .Release.Service }}
+subjects:
+- kind: ServiceAccount
+  name: default
+roleRef:
+ kind: Role
+ name: scale-deployment
+ apiGroup: rbac.authorization.k8s.io
 {{- end }}
