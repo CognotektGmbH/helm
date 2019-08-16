@@ -33,7 +33,7 @@ target:
   logzio:
     enable: false
     token: changeme
-    listener: listener.logz.io:8071
+    listener: listener-eu.logz.io:8071
     log_type: cluster-logs
   stdout:
     enable: false
