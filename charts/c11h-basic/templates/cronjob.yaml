@@ -91,6 +91,6 @@ subjects:
   name: default
 roleRef:
  kind: Role
- name: scale-deployment
+ name: {{ template "chart.fullname" . }}-scale-deployment
  apiGroup: rbac.authorization.k8s.io
 {{- end }}
