@@ -1,4 +1,4 @@
 #!/bin/bash
-[[ "$TRAVIS_BRANCH" eq "master" && "$TRAVIS_PULL_REQUEST" eq false ]] && aws s3 sync public/ s3://${BUCKET}/${BUCKET_KEY} || echo "No sync happened"
+[[ "$TRAVIS_BRANCH" = "master" && "$TRAVIS_PULL_REQUEST" = false ]] && aws s3 sync public/ s3://${BUCKET}/${BUCKET_KEY} || echo "No sync happened"
 #[[ ! -z  "$TRAVIS_BRANCH" ]] && echo "TRAVIS_BRANCH not empty: ---$TRAVIS_BRANCH---"
 #[[ ! -z  "$TRAVIS_PULL_REQUEST" ]] && echo "TRAVIS_PULL_REQUEST not empty: ---$TRAVIS_PULL_REQUEST---"
