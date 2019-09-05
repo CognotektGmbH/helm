@@ -32,15 +32,15 @@ script:
 
   # Store current index.yaml as we need to merge it to the new one (to keep older versions)
   - mkdir -p ./merge
-  - aws s3 cp s3://helm.cognotekt.com/charts/index.yaml ./merge --no-sign-request
-  - aws s3 ls s3://${BUCKET}/ --no-sign-request
+  - aws s3 cp s3://helm.cognotekt.com/charts/index.yaml ./merge
+  - aws s3 ls s3://${BUCKET}/
   # second - upload
   # create / fill repo
   - helm/helm package charts/* --destination ./public
   - helm/helm repo index --url http://${BUCKET}/${BUCKET_KEY} --merge ./merge/index.yaml ./public/
 
 
-  - '[[ "$TRAVIS_BRANCH" = "master" && "$TRAVIS_PULL_REQUEST" = false ]] && aws s3 sync public/ s3://${BUCKET}/${BUCKET_KEY}'
+    #  - '[[ "$TRAVIS_BRANCH" = "master" && "$TRAVIS_PULL_REQUEST" = false ]] && aws s3 sync public/ s3://${BUCKET}/${BUCKET_KEY}'
 
 notifications:
     email:
