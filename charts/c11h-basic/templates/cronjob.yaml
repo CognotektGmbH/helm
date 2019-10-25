@@ -64,11 +64,6 @@ kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
  name: {{ template "chart.fullname" . }}-scale-deployment
-labels:
-  app: {{ template "chart.name" . }}
-  chart: {{ template "chart.label" . }}
-  release: {{ .Release.Name }}
-  heritage: {{ .Release.Service }}
 rules:
 - apiGroups: ["extensions"]
   resources: ["deployments/scale"]
@@ -81,11 +76,6 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
  name: {{ template "chart.fullname" . }}-scale-deployment-rolebinding
-labels:
-  app: {{ template "chart.name" . }}
-  chart: {{ template "chart.label" . }}
-  release: {{ .Release.Name }}
-  heritage: {{ .Release.Service }}
 subjects:
 - kind: ServiceAccount
   name: default
