@@ -1,0 +1,33 @@
+# The purpose of this file is to annotate configuration options for the c11h-job starter chart.
+
+# Name is very important as it is used for labeling all resources. PLEASE override.
+name: "c11h-job"
+
+## Custom extra labels for the job
+# labels:
+#   foo: "bar"
+
+restartPolicy: "OnFailure"
+completions: "1"
+
+
+image:
+  repository: nginx
+  tag: stable
+  pullPolicy: IfNotPresent
+
+  env:
+    # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#envvar-v1-core
+    # - name: ENV_NAME
+    #   valueFrom:
+    #   value:
+
+  # Sets the userid of the main process in the container. Regular users start at 1000, root means 0
+  # Running as root is discouraged and not allowed when running restricted pod security policies
+  runAsUser: 1000
+
+secret:
+  enabled: false
+
+configMap:
+  enabled: false
