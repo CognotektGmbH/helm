@@ -39,5 +39,7 @@ spec:
             {{- end}}
           securityContext:
             runAsUser: {{ .Values.image.runAsUser }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
       restartPolicy: {{ .Values.restartPolicy }}
   completions: {{ .Values.completions }}
