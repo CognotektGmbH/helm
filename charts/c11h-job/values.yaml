@@ -3,6 +3,9 @@
 # Name is very important as it is used for labeling all resources. PLEASE override.
 name: "c11h-job"
 
+# podAnnotations:
+#   iam.amazonaws.com/role: c11h-team-pod-annotation
+
 ## Custom extra labels for the job
 # labels:
 #   foo: "bar"
