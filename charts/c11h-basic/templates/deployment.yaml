@@ -104,31 +104,6 @@ spec:
           {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-        {{- if .Values.vpn.enabled }}
-        - name: vpn
-          image: "{{ .Values.vpn.image.repository }}:{{ .Values.vpn.image.tag }}"
-          imagePullPolicy: {{ .Values.vpn.image.pullPolicy }}
-          securityContext:
-            capabilities:
-              add:
-                - NET_ADMIN
-            sysctls:
-            - name: kernel.dmesg_restrict
-              value: "0"
-          env:
-            {{- range .Values.vpn.env }}
-            - name: {{ .name}}
-            {{ if .value }}
-              value: {{ quote .value }}
-            {{ else if .valueFrom }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .valueFrom.secretKeyRef.name }}
-                  key: {{ .valueFrom.secretKeyRef.key }}
-                  optional: {{ .valueFrom.secretKeyRef.optional }}
-            {{- end}}
-            {{- end}}
-      {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

@@ -94,14 +94,6 @@ ingress:
   #    serviceName: name  # defaults to the name of this service
   #    servicePort: 123   # defaults to .Values.ingress.servicePort
 
-vpn:
-  enabled: false
-  image:
-    repository: mysecretregistry/somevpncontainer
-    pullPolicy: Always
-    tag: latest
-  env:
-
 resources: {} # From Helm:
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
