@@ -12,6 +12,11 @@ metadata:
     {{- end }}
 spec:
   template:
+    {{- if .Values.podAnnotations }}
+    metadata:
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 10 }}
+      {{- end }}
     spec:
       containers:
         - name: {{ .Values.name }}
