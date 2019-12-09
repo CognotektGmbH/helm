@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - set -e
+
+      # lint everything
+      - |
+        find charts/* -type d -maxdepth 0 | while read chart; do
+          echo "\nLinting chart $chart"
+          helm lint $chart
+        done
+      # prepare target directories
+      - mkdir -p ./public
+      - "echo -e 'User-Agent: *\nDisallow: /' > ./public/robots.txt"
+      # Store current index.yaml as we need to merge it to the new one (to keep older versions)
+      - mkdir -p ./merge
+      - aws s3 cp s3://${BUCKET}/charts/index.yaml ./merge --no-sign-request
+      - aws s3 ls s3://${BUCKET}/ --no-sign-request
+      # second - upload
+      # create / fill repo
+      - helm package charts/* --destination ./public
+      - helm repo index --url http://${BUCKET}/${BUCKET_KEY} --merge ./merge/index.yaml ./public/
+      - aws s3 sync public/ s3://${BUCKET}/${BUCKET_KEY}
