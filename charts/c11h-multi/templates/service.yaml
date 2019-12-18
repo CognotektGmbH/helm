@@ -1,4 +1,5 @@
 {{- range .Values.components }}
+{{- if .service -}}
 {{- if .service.enabled -}}
 apiVersion: v1
 kind: Service
@@ -8,15 +9,14 @@ metadata:
   annotations:
   {{ toYaml .service.annotations | indent 4 }}
   {{- end }}
-
-labels:
-  app: {{ template "chart.name" $ }}
-  chart: {{ template "chart.label" $ }}
-  release: {{ $.Release.Name  }}
-  heritage: {{ $.Release.Service }}
-  {{- if .service.metrics.enabled }}
-  metrics: "true"
-  {{- end }}
+  labels:
+    app: {{ template "chart.name" $ }}
+    chart: {{ template "chart.label" $ }}
+    release: {{ $.Release.Name  }}
+    heritage: {{ $.Release.Service }}
+    {{- if .service.metrics }}
+    metrics: "true"
+    {{- end }}
 spec:
   type: {{ .service.type }}
   ports:
@@ -26,14 +26,17 @@ spec:
     protocol:  {{ .protocol | default "TCP" }}
     name: {{ .name }}
   {{- end }}
+  {{- if .service.metrics }}
   {{- if .service.metrics.enableMetricsServicePort }}
   - name: metrics
     port: {{ .service.metrics.port }}
     targetPort: {{ .service.metrics.targetPort }}
   {{- end }}
-selector:
-  app: {{ template "chart.name" $ }}
-  release: {{ $.Release.Name }}
+  {{- end }}
+  selector:
+    app: {{ template "chart.name" $ }}
+    release: {{ $.Release.Name }}
+{{- end }}
 {{- end }}
 ---
 {{ end }}

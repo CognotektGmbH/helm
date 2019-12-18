@@ -1,4 +1,5 @@
 {{- range .Values.components }}
+{{- if .configMap -}}
 {{- if .configMap.enabled -}}
 apiVersion: v1
 kind: ConfigMap
@@ -14,6 +15,7 @@ data:
       {{ index $root.Values $name | quote -}}
     {{- end }}
   {{- end }}
+{{- end }}
 {{- end }}
 ---
 {{ end }}

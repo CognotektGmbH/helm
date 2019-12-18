@@ -1,4 +1,5 @@
 {{- range .Values.components }}
+{{- if .ingress -}}
 {{- if .ingress.enabled -}}
 {{- $fullName := include "chart.fullname" $ -}}
 {{- $ingressPath := .ingress.path -}}
@@ -44,6 +45,7 @@ spec:
               servicePort: {{ .servicePort | default $servicePort }}
         {{- end }}
   {{- end }}
+{{- end }}
 {{- end }}
 ---
 {{ end }}
