@@ -27,9 +27,13 @@ spec:
       labels:
         app: {{ template "chart.name" $ }}
         release: {{ $.Release.Name }}
-        {{- if .labels }}
-{{ toYaml .labels | indent 8}}
-        {{- end }}
+    {{- if .labels }}
+{{ toYaml .labels | indent 8 }}
+    {{- end }}
+    {{- if .podAnnotations }}
+      annotations:
+{{ toYaml .podAnnotations | indent 8 }}
+    {{- end }}
     spec:
       {{- if .image.imagePullSecrets }}
       imagePullSecrets:
