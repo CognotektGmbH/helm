@@ -4,6 +4,7 @@ kind: Deployment
 metadata:
   name: {{ template "chart.fullname" $ }}-{{ .name }}
   labels:
+    component: {{ .name }}
     app: {{ template "chart.name" $ }}
     chart: {{ template "chart.label" $ }}
     release: {{ $.Release.Name }}
