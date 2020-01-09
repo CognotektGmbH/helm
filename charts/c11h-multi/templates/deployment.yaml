@@ -4,9 +4,9 @@ kind: Deployment
 metadata:
   name: {{ template "chart.fullname" $ }}-{{ .name }}
   labels:
-    component: {{ .name }}
     app: {{ template "chart.name" $ }}
     chart: {{ template "chart.label" $ }}
+    component: {{ .name }}
     release: {{ $.Release.Name }}
     heritage: {{ $.Release.Service }}
     {{- if .labels }}
@@ -17,6 +17,7 @@ spec:
   selector:
     matchLabels:
       app: {{ template "chart.name" $ }}
+      component: {{ .name }}
       release: {{ $.Release.Name }}
   strategy:
     rollingUpdate:
@@ -27,6 +28,7 @@ spec:
     metadata:
       labels:
         app: {{ template "chart.name" $ }}
+        component: {{ .name }}
         release: {{ $.Release.Name }}
     {{- if .labels }}
 {{ toYaml .labels | indent 8 }}
