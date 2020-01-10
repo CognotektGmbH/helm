@@ -101,7 +101,7 @@ spec:
             {{- end}}
             {{- end}}
           securityContext:
-            runAsUser: {{ .image.runAsUser }}
+            runAsUser: {{ .image.runAsUser | default "1000" | quote }}
           {{- if .image.volumeMounts }}
           volumeMounts:
 {{ toYaml .image.volumeMounts | indent 12 }}
