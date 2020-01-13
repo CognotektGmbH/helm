@@ -2,3 +2,12 @@
 # declare a component with an actual name that could not get removed again.
 # Please look in the example folder for populated values files
 name: "my-empty-system"
+
+defaults:
+  replicaCount: 1
+  rollingUpdate:
+    maxSurgeCount: 1
+    maxUnavaliableCount: 0
+  image:
+    pullPolicy: IfNotPresent
+    runAsUser: 1000

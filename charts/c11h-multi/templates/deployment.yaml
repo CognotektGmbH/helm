@@ -13,7 +13,11 @@ metadata:
 {{ toYaml .labels | indent 4}}
     {{- end }}
 spec:
+  {{- if kindIs "invalid" .replicaCount }}
+  replicas: {{ $.Values.defaults.replicaCount }}
+  {{- else }}
   replicas: {{ .replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
       app: {{ template "chart.name" $ }}
@@ -21,8 +25,25 @@ spec:
       release: {{ $.Release.Name }}
   strategy:
     rollingUpdate:
+      {{- /* Needed because rendering because checking for .rollingupdate.something
+            will crash when .rollingupdate does not exist */}}
+      {{- if kindIs "invalid" .rollingUpdate }}
+      maxSurge: {{ $.Values.defaults.rollingUpdate.maxSurgeCount }}
+      maxUnavailable: {{ $.Values.defaults.rollingUpdate.maxUnavaliableCount }}
+      {{- else }}
+        {{- /* We cant use "default" here because '0' (a valid number) is evaluated
+              as false a the default is used. True for all numbers. */}}
+        {{- if kindIs "invalid" .rollingUpdate.maxSurgeCount }}
+      maxSurge: {{ $.Values.defaults.rollingUpdate.maxSurgeCount }}
+        {{- else }}
       maxSurge: {{ .rollingUpdate.maxSurgeCount }}
+        {{- end }}
+        {{- if kindIs "invalid" .rollingUpdate.maxUnavaliableCount }}
+      maxUnavailable: {{ $.Values.defaults.rollingUpdate.maxUnavaliableCount }}
+        {{- else }}
       maxUnavailable: {{ .rollingUpdate.maxUnavaliableCount }}
+        {{- end }}
+      {{- end }}
   minReadySeconds: 5
   template:
     metadata:
@@ -53,7 +74,7 @@ spec:
       containers:
         - name: {{ .name }}
           image: "{{ .image.repository }}:{{ .image.tag }}"
-          imagePullPolicy: {{ .image.pullPolicy }}
+          imagePullPolicy: {{ .image.pullPolicy | default $.Values.defaults.image.pullPolicy }}
           {{- if .securityContext }}
           securityContext:
             capabilities:
@@ -101,7 +122,11 @@ spec:
             {{- end}}
             {{- end}}
           securityContext:
-            runAsUser: {{ .image.runAsUser | default 1000 }}
+            {{- if kindIs "invalid" .image.runAsUser }}
+            runAsUser: {{ $.Values.defaults.image.runAsUser}}
+            {{ else }}
+            runAsUser: {{ .image.runAsUser }}
+            {{- end }}
           {{- if .image.volumeMounts }}
           volumeMounts:
 {{ toYaml .image.volumeMounts | indent 12 }}
