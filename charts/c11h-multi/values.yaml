@@ -11,3 +11,4 @@ defaults:
   image:
     pullPolicy: IfNotPresent
     runAsUser: 1000
+    tag: latest

@@ -73,7 +73,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ .name }}
-          image: "{{ .image.repository }}:{{ .image.tag }}"
+          image: "{{ .image.repository }}:{{ .image.tag | default $.Values.defaults.image.tag }}"
           imagePullPolicy: {{ .image.pullPolicy | default $.Values.defaults.image.pullPolicy }}
           {{- if .securityContext }}
           securityContext:
