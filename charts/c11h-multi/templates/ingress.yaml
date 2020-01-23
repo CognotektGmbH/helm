@@ -41,7 +41,7 @@ spec:
         {{- range $additionalPaths }}
           - path: {{ .path }}
             backend:
-              serviceName: {{ .serviceName | default $fullName }}
+              serviceName: {{ .serviceName | default {{ template "chart.name" $ }}-{{ .name }} }}
               servicePort: {{ .servicePort | default $servicePort }}
         {{- end }}
   {{- end }}
