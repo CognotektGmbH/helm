@@ -1,14 +1,15 @@
 {{- range .Values.components }}
 {{- if .ingress -}}
 {{- if .ingress.enabled -}}
-{{- $fullName := include "chart.fullname" $ -}}
+{{- $chartName := include "chart.fullname" $ -}}
+{{- $componentName := .name -}}
 {{- $ingressPath := .ingress.path -}}
 {{- $servicePort := .ingress.servicePort -}}
 {{- $additionalPaths := .ingress.additionalPaths -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}-{{ .name }}
+  name: {{ $chartName }}-{{ $componentName }}
   labels:
     app: {{ template "chart.name" $ }}
     chart: {{ template "chart.label" $ }}
@@ -36,12 +37,16 @@ spec:
         paths:
           - path: {{ $ingressPath }}
             backend:
-              serviceName: {{ $fullName }}
+              serviceName: {{ $chartName }}-{{ $componentName }}
               servicePort: {{ $servicePort }}
         {{- range $additionalPaths }}
           - path: {{ .path }}
             backend:
-              serviceName: {{ .serviceName | default {{ template "chart.name" $ }}-{{ .name }} }}
+              {{- if .serviceName }}
+              serviceName: {{ .serviceName }}
+              {{- else }}
+              serviceName: {{ $chartName }}-{{ $componentName }}
+              {{- end }}
               servicePort: {{ .servicePort | default $servicePort }}
         {{- end }}
   {{- end }}
