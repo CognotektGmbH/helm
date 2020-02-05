@@ -12,7 +12,7 @@ data:
   {{ .name }}: {{ if .value -}}
       {{ .value | quote -}}
     {{- else -}}
-      {{ index $root.Values $name | quote -}}
+      {{ index $root $name | quote -}}
     {{- end }}
   {{- end }}
 {{- end }}
