@@ -1,3 +1,4 @@
+{{- $root := . -}}
 {{- range .Values.components }}
 {{- if .configMap -}}
 {{- if .configMap.enabled -}}
@@ -6,7 +7,6 @@ kind: ConfigMap
 metadata:
   name: {{ $.Release.Name }}-{{ .name }}-config
 data:
-  {{- $root := . -}}
   {{- range .configMap.entries }}
   {{- $name := .name }}
   {{ .name }}: {{ if .value -}}
