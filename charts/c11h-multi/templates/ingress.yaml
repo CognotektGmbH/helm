@@ -4,6 +4,7 @@
 {{- $chartName := include "chart.fullname" $ -}}
 {{- $componentName := .name -}}
 {{- $ingressPath := .ingress.path -}}
+{{- $serviceName := .ingress.serviceName -}}
 {{- $servicePort := .ingress.servicePort -}}
 {{- $additionalPaths := .ingress.additionalPaths -}}
 apiVersion: extensions/v1beta1
@@ -37,7 +38,11 @@ spec:
         paths:
           - path: {{ $ingressPath }}
             backend:
+              {{- if $serviceName }}
+              serviceName: {{ $serviceName }}
+              {{- else }}
               serviceName: {{ $chartName }}-{{ $componentName }}
+              {{- end }}
               servicePort: {{ $servicePort }}
         {{- range $additionalPaths }}
           - path: {{ .path }}
