@@ -72,9 +72,9 @@ spec:
 {{ toYaml .initContainers | indent 8 }}
       {{- end }}
       {{- if .Values.containers }}
-￼      containers:
-￼{{ toYaml .Values.containers | indent 8 }}
-￼      {{- else }}
+￼     containers:
+{{ toYaml .Values.containers | indent 8 }}
+￼     {{- else }}
       containers:
         - name: {{ .name }}
           image: "{{ .image.repository }}:{{ .image.tag | default $.Values.defaults.image.tag }}"
