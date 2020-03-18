@@ -46,6 +46,10 @@ spec:
       initContainers:
 {{ toYaml .Values.initContainers | indent 8 }}
       {{- end }}
+      {{- if .Values.containers }}
+      containers:
+{{ toYaml .Values.containers | indent 8 }}
+      {{- else }}
       containers:
         - name: {{ .Values.name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -104,6 +108,7 @@ spec:
           {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
+      {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
