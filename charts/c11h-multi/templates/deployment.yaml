@@ -71,9 +71,9 @@ spec:
       initContainers:
 {{ toYaml .initContainers | indent 8 }}
       {{- end }}
-      {{- if .Values.containers }}
+      {{- if .containers }}
 ￼     containers:
-{{ toYaml .Values.containers | indent 8 }}
+{{ toYaml .containers | indent 8 }}
 ￼     {{- else }}
       containers:
         - name: {{ .name }}
