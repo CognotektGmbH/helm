@@ -59,10 +59,6 @@ spec:
 {{ toYaml .podAnnotations | indent 8 }}
     {{- end }}
     spec:
-      {{- if .image.imagePullSecrets }}
-      imagePullSecrets:
-        - name: {{ .image.imagePullSecrets }}
-      {{- end }}
       {{- if .volumes }}
       volumes:
 {{ toYaml .volumes | indent 8}}
