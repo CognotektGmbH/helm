@@ -59,9 +59,9 @@ spec:
 {{ toYaml .podAnnotations | indent 8 }}
     {{- end }}
     spec:
-      {{- if .image.imagePullSecrets }}
+      {{- if .imagePullSecrets }}
       imagePullSecrets:
-        - name: {{ .image.imagePullSecrets }}
+        - name: {{ .imagePullSecrets }}
       {{- end }}
       {{- if .volumes }}
       volumes:
@@ -72,9 +72,10 @@ spec:
 {{ toYaml .initContainers | indent 8 }}
       {{- end }}
       containers:
+      {{- range .containers }}
         - name: {{ .name }}
-          image: "{{ .image.repository }}:{{ .image.tag | default $.Values.defaults.image.tag }}"
-          imagePullPolicy: {{ .image.pullPolicy | default $.Values.defaults.image.pullPolicy }}
+          image: "{{ .image.repository }}:{{ .image.tag | default $.Values.defaults.tag }}"
+          imagePullPolicy: {{ .pullPolicy | default $.Values.defaults.pullPolicy }}
           {{- if .securityContext }}
           securityContext:
             capabilities:
@@ -82,12 +83,12 @@ spec:
                 {{ toYaml .securityContext | indent 8 }}
           {{- end }}
           ports:
-          {{- range .image.ports }}
+          {{- range .ports }}
             - name: {{ .name }}
               containerPort: {{ .containerPort }}
               protocol: TCP
           {{- end }}
-          {{- with .image.livenessProbe }}
+          {{- with .livenessProbe }}
           livenessProbe:
             httpGet:
               path: {{ .path }}
@@ -97,7 +98,7 @@ spec:
             periodSeconds: {{ .periodSeconds }}
             timeoutSeconds: {{ .timeoutSeconds }}
           {{- end }}
-          {{- with .image.readinessProbe }}
+          {{- with .readinessProbe }}
           readinessProbe:
             httpGet:
               path: {{ .path }}
@@ -108,7 +109,7 @@ spec:
             timeoutSeconds: {{ .timeoutSeconds }}
           {{- end }}
           env:
-            {{- range .image.env }}
+            {{- range .env }}
             - name: {{ .name}}
             {{ if .value }}
               value: {{ quote .value }}
@@ -128,15 +129,16 @@ spec:
             {{- end}}
             {{- end}}
           securityContext:
-            {{- if kindIs "invalid" .image.runAsUser }}
-            runAsUser: {{ $.Values.defaults.image.runAsUser}}
+            {{- if kindIs "invalid" .runAsUser }}
+            runAsUser: {{ $.Values.defaults.runAsUser}}
             {{ else }}
-            runAsUser: {{ .image.runAsUser }}
+            runAsUser: {{ .runAsUser }}
             {{- end }}
-          {{- if .image.volumeMounts }}
+          {{- if .volumeMounts }}
           volumeMounts:
-{{ toYaml .image.volumeMounts | indent 12 }}
+{{ toYaml .volumeMounts | indent 12 }}
           {{- end }}
+      {{- end }}
           resources:
 {{ toYaml .resources | indent 12 }}
     {{- with .nodeSelector }}
