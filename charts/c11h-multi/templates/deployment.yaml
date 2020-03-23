@@ -71,6 +71,10 @@ spec:
       initContainers:
 {{ toYaml .initContainers | indent 8 }}
       {{- end }}
+      {{- if .containers }}
+￼     containers:
+{{ toYaml .containers | indent 8 }}
+￼     {{- else }}
       containers:
       {{- range .containers }}
         - name: {{ .name }}
@@ -141,6 +145,7 @@ spec:
       {{- end }}
           resources:
 {{ toYaml .resources | indent 12 }}
+      {{- end }}
     {{- with .nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

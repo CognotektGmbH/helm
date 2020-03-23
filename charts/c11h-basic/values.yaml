@@ -116,3 +116,51 @@ configMap:
 nodeSelector: {}
 tolerations: []
 affinity: {}
+
+## For multiple containers
+#containers:
+#- env:
+#  - name: SOMEVAR
+#    valueFrom:
+#      secretKeyRef:
+#        key: secret-key
+#        name: keyname
+#  image: 026861505133.dkr.ecr.eu-central-1.amazonaws.com/c11h-foobar
+#  imagePullPolicy: IfNotPresent
+#  name: container1
+#  ports:
+#  - containerPort: 1234
+#    name: blah
+#    protocol: TCP
+#  resources:
+#    limits:
+#      cpu: 100m
+#      memory: 384M
+#    requests:
+#      cpu: 100m
+#      memory: 384M
+#  securityContext:
+#    runAsUser: 1000
+#- env:
+#  - name: SOMEVAR
+#    valueFrom:
+#      secretKeyRef:
+#        key: secret-key
+#        name: keyname
+#  image: 026861505133.dkr.ecr.eu-central-1.amazonaws.com/c11h-toor
+#  imagePullPolicy: IfNotPresent
+#  name: container2
+#  ports:
+#  - containerPort: 1234
+#    name: blah
+#    protocol: TCP
+#  resources:
+#    limits:
+#      cpu: 100m
+#      memory: 384M
+#    requests:
+#      cpu: 100m
+#      memory: 384M
+#  securityContext:
+#    runAsUser: 1000
+
