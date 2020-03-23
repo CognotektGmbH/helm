@@ -75,7 +75,7 @@ spec:
       {{- range .containers }}
         - name: {{ .name }}
           image: "{{ .image.repository }}:{{ .image.tag | default $.Values.defaults.tag }}"
-          imagePullPolicy: {{ .pullPolicy | default $.Values.defaults.pullPolicy }}
+          imagePullPolicy: {{ .image.pullPolicy | default $.Values.defaults.pullPolicy }}
           {{- if .securityContext }}
           securityContext:
             capabilities:
