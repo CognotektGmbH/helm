@@ -71,10 +71,6 @@ spec:
       initContainers:
 {{ toYaml .initContainers | indent 8 }}
       {{- end }}
-      {{- if .containers }}
-￼     containers:
-{{ toYaml .containers | indent 8 }}
-￼     {{- else }}
       containers:
       {{- range .containers }}
         - name: {{ .name }}
@@ -142,7 +138,6 @@ spec:
           volumeMounts:
 {{ toYaml .volumeMounts | indent 12 }}
           {{- end }}
-      {{- end }}
           resources:
 {{ toYaml .resources | indent 12 }}
       {{- end }}
