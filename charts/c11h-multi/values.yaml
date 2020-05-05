@@ -4,6 +4,7 @@
 name: "my-empty-system"
 
 defaults:
+  autoscaling: true
   replicaCount: 1
   rollingUpdate:
     maxSurgeCount: 1

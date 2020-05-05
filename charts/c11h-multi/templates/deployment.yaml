@@ -141,16 +141,32 @@ spec:
           resources:
 {{ toYaml .resources | indent 12 }}
       {{- end }}
+    {{- if $.Values.defaults.autoscaling }}
+      nodeSelector:
+        autoscaling-node: "true"
+        {{- with .nodeSelector }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
+      tolerations:
+        - key: autoscaling-node
+          operator: Equal
+          value: "false"
+          effect: NoExecute
+        {{- with .tolerations }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
+    {{- else }}
     {{- with .nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- with .affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
     {{- with .tolerations }}
       tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- end }}
+    {{- with .affinity }}
+      affinity:
 {{ toYaml . | indent 8 }}
     {{- end }}
 ---
