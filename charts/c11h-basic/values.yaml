@@ -4,6 +4,8 @@
 name: "c11h-basic"
 replicaCount: 1
 
+autoscaling: true
+
 # See https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 rollingUpdate:
   maxSurgeCount: 1
