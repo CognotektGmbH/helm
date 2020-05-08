@@ -46,7 +46,9 @@ spec:
       initContainers:
 {{ toYaml .Values.initContainers | indent 8 }}
       {{- end }}
-      serviceAccountName: {{ if .Values.serviceAccountName }}{{ include "chart.fullname" . }}{{ else }}"default"{{ end }}
+      {{ if .Values.serviceAccountName }}
+      serviceAccountName: {{  toYaml .Values.serviceAccountName }}
+      {{ end }}
       {{- if .Values.containers }}
       containers:
 {{ toYaml .Values.containers | indent 8 }}

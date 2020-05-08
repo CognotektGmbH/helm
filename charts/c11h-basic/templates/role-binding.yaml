@@ -14,7 +14,7 @@ roleRef:
   name: {{ include "chart.fullname" . }}
 subjects:
 - kind: ServiceAccount
-  name: {{ include "chart.fullname" . }}
+  name: {{  toYaml .Values.serviceAccountName }}
   namespace: "{{ .Release.Namespace }}"
 {{- end -}}
 
