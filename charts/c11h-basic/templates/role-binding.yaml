@@ -1,0 +1,20 @@
+{{- if .Values.serviceAccountName -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: "RoleBinding"
+metadata:
+  name: {{ include "chart.fullname" . }}
+  labels:
+    app: {{ include "chart.fullname" . }}
+    chart: {{ include "chart.label" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: "Role"
+  name: {{ include "chart.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "chart.fullname" . }}
+  namespace: "{{ .Release.Namespace }}"
+{{- end -}}
+
