@@ -1,7 +1,33 @@
 # We start with an almost empty values file because we would otherwise
 # declare a component with an actual name that could not get removed again.
 # Please look in the example folder for populated values files
-name: "my-empty-system"
+#components:
+#  replaceme:
+#    serviceAccountName: "serviceaccount" # Used for IRSA
+#    name: "replaceme"
+#    replicaCount: 1
+#
+#    containers:
+#      replaceme-service:
+#        name: "replaceme-service"
+#        image:
+#          repository: "026861505133.dkr.ecr.eu-central-1.amazonaws.com/c11h-team-service/replaceme"
+#          pullPolicy: Always
+#          runAsUser: 0
+#        env:
+#          - name: BLA_ENV
+#            value: "http://someservice:8080"
+#        ports:
+#          - name: web
+#            containerPort: 8080
+#            protocol: TCP
+#        resources:
+#          limits:
+#            cpu: "2"
+#            memory: "4Gi"
+#          requests:
+#            cpu: "500m"
+#            memory: "2Gi"
 
 defaults:
   autoscaling: true

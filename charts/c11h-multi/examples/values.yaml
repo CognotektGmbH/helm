@@ -1,6 +1,8 @@
 name: "my-system"
 components:
   - name: simple-component
+    # Service account used for IRSA
+    serviceAccountName: c11h-team-stage-service
     replicaCount: 1
     rollingUpdate:
       maxSurgeCount: 1
