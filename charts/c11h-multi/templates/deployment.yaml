@@ -72,7 +72,7 @@ spec:
 {{ toYaml .initContainers | indent 8 }}
       {{- end }}
       {{- if .serviceAccountName }}
-      serviceAccountName: {{ include "chart.fullname" $ }}
+      serviceAccountName: {{  toYaml .serviceAccountName }}
       {{- end }}
       containers:
       {{- range .containers }}
