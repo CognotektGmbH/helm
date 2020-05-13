@@ -14,8 +14,8 @@ defaults:
 
 #components:
 #  replaceme:
-#    serviceAccountName: "serviceaccount" # Used for IRSA
-#    name: "replaceme"
+## Role to assume for IRSA. Should be in following format
+#    irsaRoleName: c11h-clustername-irsa-team-stage-svc
 #    replicaCount: 1
 #
 ## If you need multiple containers

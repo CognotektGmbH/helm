@@ -71,8 +71,8 @@ spec:
       initContainers:
 {{ toYaml .initContainers | indent 8 }}
       {{- end }}
-      {{- if .serviceAccountName }}
-      serviceAccountName: {{  toYaml .serviceAccountName }}
+      {{- if .irsaRoleName }}
+      serviceAccountName: {{ $.Release.Name }}-{{ .name }}
       {{- end }}
       containers:
       {{- range .containers }}
