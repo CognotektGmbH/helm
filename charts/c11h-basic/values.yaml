@@ -20,8 +20,8 @@ rollingUpdate:
 # podAnnotations:
 #   foo: "bar"
 
-## Service-account used for IRSA. Should be in following format
-# serviceAccountName: c11h-team-stage-svc-access
+## Role to assume for IRSA. Should be in following format
+# irsaRoleName: c11h-clustername-irsa-team-stage-svc
 
 image:
   repository: nginx

@@ -46,8 +46,8 @@ spec:
       initContainers:
 {{ toYaml .Values.initContainers | indent 8 }}
       {{- end }}
-      {{ if .Values.serviceAccountName }}
-      serviceAccountName: {{  toYaml .Values.serviceAccountName }}
+      {{ if .Values.irsaRoleName }}
+      serviceAccountName: {{ .Release.Name }}
       {{ end }}
       {{- if .Values.containers }}
       containers:
