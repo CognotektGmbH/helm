@@ -75,6 +75,9 @@ spec:
               path: {{ .path }}
               port: {{ .port }}
             initialDelaySeconds: {{ .initialDelaySeconds }}
+            timeoutSeconds: {{ .timeOutSeconds }}
+            failureThreshold: {{ .failureThreshold }}
+
           {{- end }}
           {{- with .Values.image.readinessProbe }}
           readinessProbe:
@@ -82,6 +85,8 @@ spec:
               path: {{ .path }}
               port: {{ .port }}
             initialDelaySeconds: {{ .initialDelaySeconds }}
+            timeoutSeconds: {{ .timeoutSeconds }}
+            failureThreshold: {{ .failureThreshold }}
           {{- end }}
           env:
             {{- range .Values.image.env }}
