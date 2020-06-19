@@ -110,7 +110,6 @@ spec:
             {{- end}}
           securityContext:
             runAsUser: {{ .Values.image.runAsUser }}
-            runAsGroup: {{ .Values.image.runAsUser }}
           {{- if .Values.image.volumeMounts }}
           volumeMounts:
 {{ toYaml .Values.image.volumeMounts | indent 12 }}

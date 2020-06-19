@@ -137,11 +137,6 @@ spec:
             {{ else }}
             runAsUser: {{ .runAsUser }}
             {{- end }}
-            {{- if kindIs "invalid" .runAsGroup }}
-            runAsGroup: {{ $.Values.defaults.runAsUser }}
-            {{ else }}
-            runAsGroup: {{ .runAsGroup }}
-            {{- end }}
           {{- if .volumeMounts }}
           volumeMounts:
 {{ toYaml .volumeMounts | indent 12 }}
