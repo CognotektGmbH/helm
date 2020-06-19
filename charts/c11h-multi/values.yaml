@@ -4,12 +4,12 @@
 defaults:
   autoscaling: true
   replicaCount: 1
+  runAsUser: 1000
   rollingUpdate:
     maxSurgeCount: 1
     maxUnavaliableCount: 0
   image:
     pullPolicy: IfNotPresent
-    runAsUser: 1000
     tag: latest
 
 #components:

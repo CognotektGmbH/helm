@@ -133,9 +133,14 @@ spec:
             {{- end}}
           securityContext:
             {{- if kindIs "invalid" .runAsUser }}
-            runAsUser: {{ $.Values.defaults.runAsUser}}
+            runAsUser: {{ $.Values.defaults.runAsUser }}
             {{ else }}
             runAsUser: {{ .runAsUser }}
+            {{- end }}
+            {{- if kindIs "invalid" .runAsGroup }}
+            runAsGroup: {{ $.Values.defaults.runAsUser }}
+            {{ else }}
+            runAsGroup: {{ .runAsGroup }}
             {{- end }}
           {{- if .volumeMounts }}
           volumeMounts:
@@ -172,5 +177,9 @@ spec:
       affinity:
 {{ toYaml . | indent 8 }}
     {{- end }}
+      securityContext:
+        {{- if kindIs "invalid" .fsGroup }}
+        fsGroup: {{ $.Values.defaults.runAsUser }}
+        {{- end }}
 ---
     {{ end }}
