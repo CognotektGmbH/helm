@@ -145,3 +145,5 @@ spec:
       affinity:
 {{ toYaml . | indent 8 }}
     {{- end }}
+      securityContext:
+        fsGroup: {{ .Values.image.runAsUser }}

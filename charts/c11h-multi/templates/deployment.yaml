@@ -133,7 +133,7 @@ spec:
             {{- end}}
           securityContext:
             {{- if kindIs "invalid" .runAsUser }}
-            runAsUser: {{ $.Values.defaults.runAsUser}}
+            runAsUser: {{ $.Values.defaults.runAsUser }}
             {{ else }}
             runAsUser: {{ .runAsUser }}
             {{- end }}
@@ -172,5 +172,9 @@ spec:
       affinity:
 {{ toYaml . | indent 8 }}
     {{- end }}
+      securityContext:
+        {{- if kindIs "invalid" .fsGroup }}
+        fsGroup: {{ $.Values.defaults.runAsUser }}
+        {{- end }}
 ---
     {{ end }}
