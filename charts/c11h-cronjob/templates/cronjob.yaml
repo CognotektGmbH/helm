@@ -1,0 +1,29 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "chart.fullname" . }}
+  labels:
+    app: {{ .Release.Name }}
+    chart: {{ template "chart.label" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    {{- if .Values.labels }}
+{{ toYaml .Values.labels | indent 4}}
+    {{- end }}
+spec:
+  schedule: {{ .Values.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: {{ .Release.Name }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              env: {{- include "helpers.list-env-variables" . | indent 14 }}
+              command: {{ .Values.command }}
+              securityContext:
+                runAsUser: {{ .Values.image.runAsUser }}
+              resources:
+    {{ toYaml .Values.resources | indent 12 }}
+          restartPolicy: {{ .Values.restartPolicy }}
