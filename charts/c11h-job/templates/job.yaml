@@ -18,6 +18,9 @@ spec:
 {{ toYaml .Values.podAnnotations | indent 10 }}
       {{- end }}
     spec:
+      {{ if .Values.irsaRoleName }}
+      serviceAccountName: {{ .Release.Name }}
+      {{ end }}
       containers:
         - name: {{ .Values.name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
