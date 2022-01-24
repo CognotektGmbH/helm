@@ -21,32 +21,24 @@ spec:
       {{ if .Values.irsaRoleName }}
       serviceAccountName: {{ .Release.Name }}
       {{ end }}
-      containers:
-        - name: {{ .Values.name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          env:
-            {{- range .Values.image.env }}
-            - name: {{ .name}}
-            {{ if .value }}
-              value: {{ quote .value }}
-            {{ else if .valueFrom }}
-              valueFrom:
-              {{ if .valueFrom.secretKeyRef }}
-                secretKeyRef:
-                  name: {{ .valueFrom.secretKeyRef.name }}
-                  key: {{ .valueFrom.secretKeyRef.key }}
-                  optional: {{ .valueFrom.secretKeyRef.optional }}
-              {{ else if .valueFrom.configMapKeyRef }}
-                configMapKeyRef:
-                  name: {{ .valueFrom.configMapKeyRef.name }}
-                  key: {{ .valueFrom.configMapKeyRef.key }}
-                  optional: {{ .valueFrom.configMapKeyRef.optional }}
-              {{- end}}
-            {{- end}}
-            {{- end}}
+      {{ if .Values.initContainer }}
+      initContainers:
+        - name: {{ .Values.initContainer.name }}
+          image: "{{ .Values.initContainer.repository }}:{{ .Values.initContainer.tag }}"
+          imagePullPolicy: {{ .Values.initContainer.pullPolicy }}
+          env: {{- include "helpers.list-env-variables" . | indent 14 }}
           securityContext:
-            runAsUser: {{ .Values.image.runAsUser }}
+            runAsUser: {{ .Values.initContainer.runAsUser }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+      {{- end }}
+      containers:
+        - name: {{ .Values.container.name }}
+          image: "{{ .Values.container.repository }}:{{ .Values.container.tag }}"
+          imagePullPolicy: {{ .Values.container.pullPolicy }}
+          env: {{- include "helpers.list-env-variables" . | indent 14 }}
+          securityContext:
+            runAsUser: {{ .Values.container.runAsUser }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       restartPolicy: {{ .Values.restartPolicy }}
