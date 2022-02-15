@@ -30,7 +30,7 @@ spec:
           securityContext:
             runAsUser: {{ .Values.initContainer.runAsUser }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.initContainer.resources | indent 12 }}
       {{- end }}
       containers:
         - name: {{ .Values.container.name }}
@@ -40,6 +40,6 @@ spec:
           securityContext:
             runAsUser: {{ .Values.container.runAsUser }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.container.resources | indent 12 }}
       restartPolicy: {{ .Values.restartPolicy }}
   completions: {{ .Values.completions }}
