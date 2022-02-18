@@ -14,7 +14,7 @@ restartPolicy: "OnFailure"
 completions: "1"
 
 
-image:
+container:
   repository: nginx
   tag: stable
   pullPolicy: IfNotPresent
