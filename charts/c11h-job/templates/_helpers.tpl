@@ -57,6 +57,7 @@ Create chart name and version as used by the chart label.
 {{- end}}
 
 
+{{ if .Values.secret }}
 {{- $secretname := .Values.secret.name -}}
 {{- range $key, $val := .Values.env.secret }}
 - name: {{ $key }}
@@ -64,6 +65,7 @@ Create chart name and version as used by the chart label.
     secretKeyRef:
       name: {{ $secretname }}
       key: {{ $key  }}
+{{- end}}
 {{- end}}
 
 {{- range $key, $val := .Values.env.normal }}

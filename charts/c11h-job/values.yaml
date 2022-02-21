@@ -41,8 +41,5 @@ resources: {} # From Helm:
   #  cpu: 100m
   #  memory: 128Mi
 
-secret:
-  enabled: false
-
 configMap:
   enabled: false
